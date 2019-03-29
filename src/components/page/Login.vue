@@ -9,12 +9,12 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="login('ruleForm')">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    <el-button type="primary" @click="login('ruleForm')">登录</el-button>
                 </div>
                 <p class="login-tips">Tips : 用户名和密码随便填。</p>
             </el-form>
@@ -23,12 +23,15 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import md5 from 'md5';
+    let obj;
     export default {
         data: function(){
             return {
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123'
+                    username: '',
+                    password: ''
                 },
                 rules: {
                     username: [
@@ -41,15 +44,39 @@
             }
         },
         methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+            login(ruleForm) {
+                this.$refs[ruleForm].validate((valid) => {
+                    if (!valid) {
+                        this.$alert('请填写符合规范的用户名和密码', '错误', {
+                            confirmButtonText: '确定',
+                            callback: action => {}
+                        });
+                        return;
                     }
+                    axios({
+                        url: `/api/login/login`,
+                        method: 'POST',
+                        diy: true,
+                        data: {
+                            username: this.ruleForm.username,
+                            password: md5(this.ruleForm.password)
+                            /*   token: obj.getToken()*/
+                        }
+                    }).then(res => {
+                        if (!res.data.result.success) {
+                            /*   obj.reset();*/
+                            this.ruleForm.username = '';
+                            this.ruleForm.password = '';
+                            this.$alert(res.data.result.msg, '错误', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+
+                                }
+                            });
+                            return;
+                        }
+                        this.$router.push('/');
+                    })
                 });
             }
         }

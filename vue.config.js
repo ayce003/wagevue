@@ -4,7 +4,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api':{
-                target:'http://jsonplaceholder.typicode.com',
+                target:'http://localhost:9966',
                 changeOrigin:true,
                 pathRewrite:{
                     '/api':''
