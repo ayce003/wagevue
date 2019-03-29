@@ -46,6 +46,7 @@
         methods: {
             login(ruleForm) {
                 this.$refs[ruleForm].validate((valid) => {
+                    localStorage.setItem('ms_username',this.ruleForm.username);
                     if (!valid) {
                         this.$alert('请填写符合规范的用户名和密码', '错误', {
                             confirmButtonText: '确定',
