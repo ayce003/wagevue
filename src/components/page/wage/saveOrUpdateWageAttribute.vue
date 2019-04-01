@@ -48,7 +48,7 @@
                   url:`/api/wageAttribute/update/findWageAttributeById/${this.id}`,
                   method:'GET'
               }).then(res=>{
-                  Object.assign(this.upsertForm,res.data);
+                  Object.assign(this.upsertForm,res.data.data);
               }).catch(error=>{
 
               })
@@ -66,11 +66,20 @@
                             method:'POST',
                             data:this.upsertForm
                         }).then(res=>{
-                            this.$message({
-                                message: this.title+'成功',
-                                type: 'success'
-                            });
-                            this.$emit('closeSaveOrUpdate',true);
+                            if(res.data.result.success==true){
+                                this.$message({
+                                    message: res.data.result.msg,
+                                    type: 'success'
+                                });
+                                this.$emit('closeSaveOrUpdate',true);
+                            }else {
+                                this.$message({
+                                    message: res.data.result.msg,
+                                    type: 'error'
+                                });
+                            }
+
+
                         }).catch(error=>{
                             //do something
                         })
