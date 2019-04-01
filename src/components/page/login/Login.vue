@@ -64,11 +64,12 @@
                             /*   token: obj.getToken()*/
                         }
                     }).then(res => {
-                        if (!res.data.result.success) {
+                        console.log(res);
+                        if (!res.result.success) {
                             /*   obj.reset();*/
                             this.ruleForm.username = '';
                             this.ruleForm.password = '';
-                            this.$alert(res.data.result.msg, '错误', {
+                            this.$alert(res.result.msg, '错误', {
                                 confirmButtonText: '确定',
                                 callback: action => {
 

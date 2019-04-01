@@ -38,5 +38,66 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
+    created() {
+
+
+        var me = this;
+        // 添加请求拦截器
+        let loading, loadingArray = [];
+        axios.interceptors.request.use(function (config) {
+            // 在发送请求之前做些什么
+          //  config.headers.token = me.$store.getters.getToken;
+            if (config.loading !== false) {
+                loading = me.$loading({
+                    target: document.getElementById('indexMain'),
+                    fullscreen: false,
+                    background: 'rgba(255,255,255,0.25)'
+                })
+                loadingArray.push(loading)
+            }
+            return config;
+        }, function (error) {
+            // 对请求错误做些什么
+            // loading && loading.close();
+            loadingArray.forEach(item=>item.close())
+            loadingArray = []
+            return Promise.reject(error);
+        });
+        // 添加响应拦截器
+        axios.interceptors.response.use(function (response) {
+            let resConfig = response.config;
+            // 对响应数据做点什么
+            // loading && loading.close();
+            loadingArray.forEach(item=>item.close())
+            loadingArray = []
+
+            if (response.data && response.data.result && response.data.result.code === 909) {
+                me.$router.replace('/login');
+
+            } else if (response.data && response.data.result && response.data.result.code === 904) {
+                me.$message({
+                    showClose: true,
+                    message: response.data.result.msg,
+                    type: 'error'
+                });
+                if (!config.isDev) {
+                    me.$router.replace('/login');
+                }
+
+                throw new Error();
+            } else if (response.data && response.data.result && !response.data.result.success) {
+                if (!resConfig.diy) {
+                    me.$message({
+                        showClose: true,
+                        message: response.data.result.msg,
+                        type: 'error'
+                    });
+                    throw new Error();
+                }
+
+            }
+            return response.data;
+        } );
+    },
     render: h => h(App)
 }).$mount('#app')
