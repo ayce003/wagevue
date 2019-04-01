@@ -12,8 +12,8 @@
         </el-form>
         <div  class="dialog-footer" style="text-align: center;">
             <el-button class="large" size="mini" @click="close" type="cancel">取 消</el-button>
-            <el-button class="large" size="mini" type="primary" v-if="title=='增加'" v-display:wageAttribute-save @click="saveOrUpdate('upsertForm')">确 定</el-button>
-            <el-button class="large" size="mini" type="primary" v-else v-display:wageAttribute-update @click="saveOrUpdate('upsertForm')">确 定</el-button>
+            <el-button class="large" size="mini" type="primary" v-if="title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
+            <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
         </div>
     </div>
 </template>
@@ -45,7 +45,7 @@
         created(){
           if(this.title=='修改'){
               axios({
-                  url:`${home}/wageAttribute/update/findWageAttributeById/${this.id}`,
+                  url:`/api/wageAttribute/update/findWageAttributeById/${this.id}`,
                   method:'GET'
               }).then(res=>{
                   Object.assign(this.upsertForm,res.data);

@@ -163,7 +163,7 @@
             },
             submit(){
                 axios({
-                    url:`${home}/wageAttribute/findWageAttributesByCondition`,
+                    url:`/api/wageAttribute/findWageAttributesByCondition`,
                     method:'POST',
                     data:this.searchForm
                 }).then(res=>{
