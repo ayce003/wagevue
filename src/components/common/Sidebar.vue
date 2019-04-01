@@ -88,6 +88,11 @@
                         title: '自定义图标'
                     },
                     {
+                        icon: 'el-icon-lx-emoji',
+                        index: 'wageAttribute',
+                        title: '工资属性'
+                    },
+                    {
                         icon: 'el-icon-lx-favor',
                         index: 'charts',
                         title: 'schart图表'

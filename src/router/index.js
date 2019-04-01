@@ -20,6 +20,16 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/wageAttribute',
+                    component: resolve => require(['../components/page/wageAttribute.vue'], resolve),
+                    meta: { title: '工资属性' }
+                },
+                {
+                    path: '/saveOrUpdateWageAttribute',
+                    component: resolve => require(['../components/page/saveOrUpdateWageAttribute.vue'], resolve),
+                    meta: { title: '工资属性新增/修改' }
+                },
+                {
                     path: '/icon',
                     component: resolve => require(['../components/page/Icon.vue'], resolve),
                     meta: { title: '自定义图标' }
