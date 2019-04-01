@@ -167,7 +167,8 @@
                     method:'POST',
                     data:this.searchForm
                 }).then(res=>{
-                    if(res.data.length===0&&this.searchForm.pager.page>1){
+                    console.log(res);
+                    if(res.data.data.length===0&&this.searchForm.pager.page>1){
                         this.searchForm.pager.page--;
                         this.submit();
                     }else{

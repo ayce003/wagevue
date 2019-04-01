@@ -44,23 +44,32 @@
                         title: '系统首页'
                     },
                     {
-                        icon: 'el-icon-lx-cascades',
-                        index: 'table',
-                        title: '基础表格'
-                    },
-                    {
-                        icon: 'el-icon-lx-copy',
-                        index: 'tabs',
-                        title: 'tab选项卡'
-                    },
-                    {
                         icon: 'el-icon-lx-calendar',
                         index: '3',
                         title: '表单相关',
                         subs: [
                             {
+                                icon: 'el-icon-lx-cascades',
+                                index: 'table',
+                                title: '基础表格'
+                            },
+                            {
                                 index: 'form',
                                 title: '基本表单'
+                            },
+                            {
+                                icon: 'el-icon-lx-copy',
+                                index: 'tabs',
+                                title: 'tab选项卡'
+                            },
+                            {
+                                index: 'upload',
+                                title: '文件上传'
+                            },
+                            {
+                                icon: 'el-icon-lx-emoji',
+                                index: 'icon',
+                                title: '自定义图标'
                             },
                             {
                                 index: '3-2',
@@ -77,38 +86,19 @@
                                 ]
                             },
                             {
-                                index: 'upload',
-                                title: '文件上传'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-lx-emoji',
-                        index: 'icon',
-                        title: '自定义图标'
-                    },
-                    {
-                        icon: 'el-icon-lx-emoji',
-                        index: 'wageAttribute',
-                        title: '工资属性'
-                    },
-                    {
-                        icon: 'el-icon-lx-favor',
-                        index: 'charts',
-                        title: 'schart图表'
-                    },
-                    {
-                        icon: 'el-icon-rank',
-                        index: '6',
-                        title: '拖拽组件',
-                        subs: [
-                            {
-                                index: 'drag',
-                                title: '拖拽列表',
-                            },
-                            {
-                                index: 'dialog',
-                                title: '拖拽弹框',
+                                icon: 'el-icon-rank',
+                                index: '6',
+                                title: '拖拽组件',
+                                subs: [
+                                    {
+                                        index: 'drag',
+                                        title: '拖拽列表',
+                                    },
+                                    {
+                                        index: 'dialog',
+                                        title: '拖拽弹框',
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -126,7 +116,19 @@
                                 title: '404页面'
                             }
                         ]
-                    }
+                    },
+                    {
+                        icon: 'el-icon-rank',
+                        index: 'wage',
+                        title: '工资管理',
+                        subs: [
+                            {
+                                icon: 'el-icon-lx-emoji',
+                                index: 'wageAttribute',
+                                title: '工资属性'
+                            }
+                        ]
+                    },
                 ]
             }
         },
