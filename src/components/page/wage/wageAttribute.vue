@@ -167,12 +167,11 @@
                     method:'POST',
                     data:this.searchForm
                 }).then(res=>{
-                    console.log(res);
                     if(res.data.data.length===0&&this.searchForm.pager.page>1){
                         this.searchForm.pager.page--;
                         this.submit();
                     }else{
-                        this.tableData=res.data;
+                        this.tableData=res.data.data;
 
                         for (var i = 0; i < this.tableData.length; i++) {
                             this.tableData[i] = Object.assign(
@@ -188,7 +187,7 @@
                                 }
                             );
                         }
-                        this.searchForm.pager.totalCount=res.totalCount;
+                        this.searchForm.pager.totalCount=res.data.totalCount;
                     }
                 }).catch(function (error) {
                     console.log(error);
