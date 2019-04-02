@@ -126,6 +126,11 @@
                                 icon: 'el-icon-lx-emoji',
                                 index: 'wageAttribute',
                                 title: '工资属性'
+                            },
+                            {
+                                icon: 'el-icon-lx-emoji',
+                                index: 'wageType',
+                                title: '工资类型'
                             }
                         ]
                     },

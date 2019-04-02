@@ -15,7 +15,7 @@
                         <el-button  type="warning" plain @click="clear">清空</el-button>
                     </el-form-item>
                 </el-form>-->
-                <el-button class="iconfont icon-tianjia" type="info" size="mini"   @click="toSaveOrUpdate" >新增</el-button>
+                <el-button class="iconfont icon-tianjia" type="danger" size="mini"   @click="toSaveOrUpdate" >新增</el-button>
              </div>
 
             <!--表格-->
@@ -31,15 +31,19 @@
                         </template>
 
                     </el-table-column>
-                <el-table-column fixed="right" label="操作" width="200" :render-header="operHeader" >
+                <el-table-column fixed="right" label="操作" width="300" :render-header="operHeader" >
                     <template slot-scope="scope">
-                        <a v-if="scope.row.state=='0'" class="table-edit"  @click="putIntoUse(scope.row.id)">投入使用</a>
+                        <el-button type="primary" round v-if="scope.row.state=='0'"  @click="putIntoUse(scope.row.id)">投入使用</el-button>
+                        <el-button type="success" round  v-if="scope.row.state=='0'" @click="toSaveOrUpdate(scope.row.id)">编辑</el-button>
+                        <el-button type="warning" round v-if="scope.row.state=='1'" @click="lookData(scope.row.id)">查看</el-button>
+                        <el-button type="info" round v-if="scope.row.state=='0'" @click="deleteData(scope.row.id)">删除</el-button>
+                    <!--    <a v-if="scope.row.state=='0'" class="table-edit"  @click="putIntoUse(scope.row.id)">投入使用</a>
                         <a v-if="scope.row.state=='0'" class="table-edit"   @click="toSaveOrUpdate($event,scope.row.id)">编辑</a>
                         <a v-if="scope.row.state=='1'" class="table-look"   @click="lookData(scope.row.id)">查看</a>
-                        <a v-if="scope.row.state=='0'" class="table-delete"   @click="deleteData(scope.row.id)">删除</a>
+                        <a v-if="scope.row.state=='0'" class="table-delete"   @click="deleteData(scope.row.id)">删除</a>-->
                     </template>
                 </el-table-column>
-                <div slot="empty"><no-data></no-data></div>
+            <!--    <div slot="empty"><no-data></no-data></div>-->
             </el-table>
             <el-pagination
                     style="margin-top: 10px;padding-bottom: 20px;"
@@ -55,17 +59,18 @@
                     @next-click="currentChange"
             ></el-pagination>
         </div>
-        <save-or-update-wageType v-if="saveOrUpdate.visible" v-bind="saveOrUpdate" @closeSaveOrUpdate="closeSaveOrUpdate"></save-or-update-wageType>
-        <wage-type-show v-if="lookShow.visible" v-bind="lookShow" @closeSaveOrUpdate="closeSaveOrUpdate"></wage-type-show>
+    <save-or-update-wageType v-if="saveOrUpdate.visible" v-bind="saveOrUpdate" @closeSaveOrUpdate="closeSaveOrUpdate"></save-or-update-wageType>
+    <wage-type-show v-if="lookShow.visible" v-bind="lookShow" @closeSaveOrUpdate="closeSaveOrUpdate"></wage-type-show>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
     import saveOrUpdateWageType from './saveOrUpdateWageType';
+    import wageTypeShow from './wageTypeShow';
     export default {
         name: "wageType",
-        components:{saveOrUpdateWageType},
+        components:{saveOrUpdateWageType,wageTypeShow},
         data() {
             return {
                 searchForm:{
@@ -241,6 +246,3 @@
     }
 </script>
 
-<style scoped lang="scss">
-
-</style>
