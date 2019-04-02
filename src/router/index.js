@@ -104,6 +104,21 @@ export default new Router({
                     path: '/403',
                     component: resolve => require(['../components/page/error/403.vue'], resolve),
                     meta: { title: '403' }
+                },
+                {
+                    path: '/worker',
+                    component: resolve => require(['../components/page/worker/worker.vue'], resolve),
+                    meta: { title: '学生管理' }
+                },
+                {
+                    path: '/dept',
+                    component: resolve => require(['../components/page/worker/dept/dept.vue'], resolve),
+                    meta: { title: '部门管理' }
+                },
+                {
+                    path: '/post',
+                    component: resolve => require(['../components/page/worker/post/post.vue'], resolve),
+                    meta: { title: '岗位管理' }
                 }
             ]
         },

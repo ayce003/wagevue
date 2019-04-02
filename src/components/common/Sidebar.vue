@@ -139,6 +139,25 @@
                             }
                         ]
                     },
+                    {
+                        icon: 'el-icon-lx-people',
+                        index: 'worker',
+                        title: '员工管理',
+                        subs: [
+                            {
+                                icon: 'el-icon-lx-people',
+                                index: 'worker',
+                                title: '员工管理'
+                            },
+                            {
+                                index: 'dept',
+                                title: '部门管理'
+                            },{
+                                index: 'post',
+                                title: '岗位管理'
+                            }
+                        ]
+                    }
                 ]
             }
         },
