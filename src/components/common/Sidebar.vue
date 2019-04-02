@@ -131,6 +131,11 @@
                                 icon: 'el-icon-lx-emoji',
                                 index: 'wageType',
                                 title: '工资类型'
+                            },
+                            {
+                                icon: 'el-icon-lx-emoji',
+                                index: 'salaryEntry',
+                                title: '工资条'
                             }
                         ]
                     },

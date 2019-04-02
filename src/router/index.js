@@ -35,6 +35,11 @@ export default new Router({
                     meta: { title: '工资类型' }
                 },
                 {
+                    path: '/salaryEntry',
+                    component: resolve => require(['../components/page/wage/salaryEntry.vue'], resolve),
+                    meta: { title: '工资条' }
+                },
+                {
                     path: '/icon',
                     component: resolve => require(['../components/page/form/icon/Icon.vue'], resolve),
                     meta: { title: '自定义图标' }
