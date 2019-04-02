@@ -77,6 +77,7 @@
                             });
                             return;
                         }
+                        this.$store.commit('setToken', res.data);
                         this.$router.push('/');
                     })
                 });

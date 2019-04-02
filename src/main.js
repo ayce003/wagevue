@@ -48,9 +48,7 @@ new Vue({
         let loading, loadingArray = [];
         axios.interceptors.request.use(function (config) {
             // 在发送请求之前做些什么
-            console.log(me.$store.getters.getToken);
             config.headers.token = me.$store.getters.getToken;
-            console.log(config.headers.token);
             if (config.loading !== false) {
                 loading = me.$loading({
                     target: document.getElementById('indexMain'),
