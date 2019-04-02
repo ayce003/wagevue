@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import axios from 'axios';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
@@ -38,6 +39,7 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
+    store,
     created() {
 
 
@@ -46,7 +48,9 @@ new Vue({
         let loading, loadingArray = [];
         axios.interceptors.request.use(function (config) {
             // 在发送请求之前做些什么
-          //  config.headers.token = me.$store.getters.getToken;
+            console.log(me.$store.getters.getToken);
+            config.headers.token = me.$store.getters.getToken;
+            console.log(config.headers.token);
             if (config.loading !== false) {
                 loading = me.$loading({
                     target: document.getElementById('indexMain'),
@@ -58,7 +62,7 @@ new Vue({
             return config;
         }, function (error) {
             // 对请求错误做些什么
-            // loading && loading.close();
+             loading && loading.close();
             loadingArray.forEach(item=>item.close())
             loadingArray = []
             return Promise.reject(error);
