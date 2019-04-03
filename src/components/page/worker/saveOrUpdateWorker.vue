@@ -28,9 +28,7 @@
                         <el-select v-model="upsertForm.departmentId" @change="findDeptList" size="mini">
                             <el-option v-for="item in deptList" :key="item.deptId" :label="item.deptName" :value="item.deptId"></el-option>
                         </el-select>
-                        <el-button class="iconfont icon-tianjia" type="danger" size="mini"   @click="showAddDept" >新增部门</el-button>
                     </el-form-item>
-
                     <el-form-item label="岗位" prop="postName">
                         <el-select v-model="upsertForm.postId" @change="findPostList" size="mini">
                             <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
@@ -55,22 +53,6 @@
             <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
         </div>
 
-        <!--添加或者修改部门表单-->
-        <el-dialog  :title="dialog.title"   width="400px" :visible.sync="dialog.dialogFormVisible">
-            <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item></el-breadcrumb-item>
-                <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
-            </el-breadcrumb>
-            <el-form :model="upsertForm" size="mini" :rules="rules" ref="deptForm" label-width="80px" style="margin-top: 20px;" >
-                <el-form-item label="部门名称" prop="deptName">
-                    <el-input  v-model="deptForm.deptName" auto-complete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <div  class="dialog-footer" style="text-align: center;">
-                <el-button class="large" size="mini" @click="cancel">取 消</el-button>
-                <el-button class="large" size="mini" type="primary" v-if="title=='增加'" @click="saveDept('upsertForm')">确 定</el-button>
-            </div>
-        </el-dialog>
     </div>
 </template>
 
@@ -110,10 +92,6 @@
                 },
                 postList:[],
                 postForm:{},
-                dialog:{
-                    dialogFormVisible:false,
-                    title:'增加'
-                },
 
                 rules: {
                           username: [
@@ -160,9 +138,9 @@
                                   { required: true, message: '请输入部门id', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                          createTime: [
-                                  { required: true, message: '请输入创建时间', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                          workNumber: [
+                                  { required: true, message: '请输入员工工号', trigger: 'blur',transform:val=>val.trim() },
+                                  {  max: 32, message: '必须为数字', trigger: 'blur' }
                               ],
                           updateTime: [
                                   { required: true, message: '请输入更新时间', trigger: 'blur',transform:val=>val.trim() },
@@ -174,7 +152,7 @@
         created(){
           if(this.title=='修改'){
               axios({
-                  url:`${home}/worker/update/findWorkerById/${this.id}`,
+                  url:`api/worker/update/findWorkerById/${this.id}`,
                   method:'GET'
               }).then(res=>{
                   Object.assign(this.upsertForm,res.data);
@@ -260,51 +238,16 @@
                 let n = this.upsertForm.name;
                 this.upsertForm.username = pinyinUtil.getPinyin(n,'',false);
             },
-            showAddDept(){
-                this.$nextTick(() => {
-                    if (this.$refs.deptForm) {
-                        this.$refs.deptForm.resetFields();
-                    }
-                    this.dialog.dialogFormVisible=true;
-                    this.dialog.title='增加';
-                })
 
-            },
-            saveDept(formName){
-                this.$refs[formName].validate(valid=>{
-                    if(valid){
-                        axios({
-                            url:`api/dept/saveDept`,
-                            method:'POST',
-                            data:this.deptForm
-                        }).then(res=>{
-                            this.$message({
-                                message: this.title+'成功',
-                                type: 'success'
-                            });
-                            this.dialog.dialogFormVisible = false;
-                            this.$refs.deptForm.resetFields();//清空校验
-                            this.findDeptList()
-                        }).catch(error=>{
-                            //do something
-                        })
-
-
-                    }
-                })
-            },
             close(){
                 this.$emit('closeSaveOrUpdate');
             },
-            cancel(){
-                this.dialog.dialogFormVisible = false;
-                this.$refs['deptForm'].resetFields();//清空校验
-            },
+
         }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .saveOrUpdateCrud{
         margin: 20px 0 0 10px;
     }

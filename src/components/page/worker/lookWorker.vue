@@ -73,7 +73,7 @@
         },
         created(){
           axios({
-                url:`${home}/worker/look/lookWorkerById/${this.id}`,
+                url:`api/worker/look/lookWorkerById/${this.id}`,
                 method:'GET'
             }).then(res=>{
                 Object.assign(this.upsertForm,res.data);
@@ -92,7 +92,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .look{
         width:60%;
         margin: 20px 0 0 10px;

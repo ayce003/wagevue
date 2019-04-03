@@ -1,72 +1,72 @@
 <template>
     <div class="margin-40-60-0">
-        <div v-show="!saveOrUpdate.visible&&!look.visible">
-            <!--搜索表单-->
-            <div class="search-box">
-                <el-form ref="searchForm" size="mini" :rules="rules" :inline="true" :model="searchForm" >
-                         <el-form-item label="部门名称:" prop="deptName">
+        <!--搜索表单-->
+        <div class="search-box">
+            <el-row>
+                <el-form ref="searchForm" size="mini" :rules="searchRules" :inline="true" :model="searchForm" >
+                    <el-col :span="22">
+                        <el-form-item label="部门名称:" prop="deptName">
                             <el-input v-model="searchForm.deptName" placeholder="请输入部门名称"></el-input>
                         </el-form-item>
-                         <el-form-item label="部门id:" prop="deptId">
-                            <el-input v-model="searchForm.deptId" placeholder="请输入部门id"></el-input>
+                        <el-form-item>
+                            <el-button  type="primary" id="findBtn"  @click="submit(1)">查询</el-button>
+                            <el-button  type="warning" plain @click="clear">清空</el-button>
                         </el-form-item>
-                         <el-form-item label="创建时间:" prop="createTime">
-                            <el-input v-model="searchForm.createTime" placeholder="请输入创建时间"></el-input>
-                        </el-form-item>
-                         <el-form-item label="更新时间:" prop="updateTime">
-                            <el-input v-model="searchForm.updateTime" placeholder="请输入更新时间"></el-input>
-                        </el-form-item>
-                    <el-form-item>
-                        <el-button  type="primary" id="findBtn" v-display:dept-find[click] @click="submit(1)">查询</el-button>
-                        <el-button  type="warning" plain @click="clear">清空</el-button>
-                    </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-button class="iconfont icon-tianjia" type="primary" size="mini"   @click="showAddDialog">新增部门</el-button>
+                    </el-col>
                 </el-form>
-                <div>
-                   <el-button class="iconfont icon-tianjia" type="info" size="mini" v-display:dept-save  @click="toSaveOrUpdate" >新增</el-button>
-                </div>
-             </div>
-
-            <!--表格-->
-            <el-table class="table-ui" :stripe="true" :data="tableData"  @sort-change="sortChange" >
-                    <el-table-column prop="deptName" label="部门名称" sortable="custom" ></el-table-column>
-                    <el-table-column prop="deptId" label="部门id" sortable="custom" ></el-table-column>
-                    <el-table-column prop="createTime" label="创建时间" sortable="custom" ></el-table-column>
-                    <el-table-column prop="updateTime" label="更新时间" sortable="custom" ></el-table-column>
-                <el-table-column fixed="right" label="操作" width="160"  >
-                    <template slot-scope="scope">
-                        <a  class="table-edit" v-display:dept-update @click="toSaveOrUpdate($event,scope.row.id)">修改</a>
-                        <a  class="table-look" v-display:dept-look @click="toLook($event,scope.row.id)">查看</a>
-                        <a  class="table-delete" v-display:dept-delete  @click="deleteData(scope.row.id)">删除</a>
-                    </template>
-                </el-table-column>
-                <div slot="empty"><no-data></no-data></div>
-            </el-table>
-            <el-pagination
-                    style="margin-top: 10px;padding-bottom: 20px;"
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="searchForm.pager.totalCount"
-                    :page-size="searchForm.pager.pageSize"
-                    :current-page.sync="searchForm.pager.page"
-                    :page-sizes="[10, 20, 30, 40, 50, 100]"
-                    @size-change="sizeChange"
-                    @current-change="currentChange"
-                    @prev-click="currentChange"
-                    @next-click="currentChange"
-            ></el-pagination>
-        </div>
-        <save-or-update-dept v-if="saveOrUpdate.visible" v-bind="saveOrUpdate" @closeSaveOrUpdate="closeSaveOrUpdate"></save-or-update-dept>
-        <look-dept v-if="look.visible" v-bind="look" :visible.sync="look.visible"></look-dept>
+            </el-row>
+         </div>
+        <!--表格-->
+        <el-table class="table-ui" :stripe="true"  :data="tableData"  @sort-change="sortChange" >
+                <el-table-column type="index" width="100" label="id" ></el-table-column>
+                <el-table-column prop="deptName" label="部门名称" sortable="custom" ></el-table-column>
+            <el-table-column fixed="right" label="操作" width="160"  >
+                <template slot-scope="scope">
+                    <el-button    type="success" round @click="showUpdateDialog(scope.row.id)">编辑</el-button>
+                    <el-button  type="danger" round @click="deleteData(scope.row.id)">删除</el-button>
+                </template>
+            </el-table-column>
+            <div slot="empty"><no-data></no-data></div>
+        </el-table>
+        <el-pagination
+                style="margin-top: 10px;padding-bottom: 20px;"
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="searchForm.pager.totalCount"
+                :page-size="searchForm.pager.pageSize"
+                :current-page.sync="searchForm.pager.page"
+                :page-sizes="[10, 20, 30, 40, 50, 100]"
+                @size-change="sizeChange"
+                @current-change="currentChange"
+                @prev-click="currentChange"
+                @next-click="currentChange"
+        ></el-pagination>
+        <!--添加或者修改表单-->
+        <el-dialog  :title="dialog.title"   width="650px" :visible.sync="dialog.dialogFormVisible">
+            <el-form class="upsertForm" size="mini" :model="upsertForm" :rules="rules" ref="upsertForm" label-width="80px" >
+                <input type="hidden" :value="upsertForm.id">
+                          <el-form-item label="部门名称" prop="deptName">
+                             <el-input  v-model="upsertForm.deptName" auto-complete="off"></el-input>
+                         </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="large" size="mini" @click="dialog.dialogFormVisible = false">取 消</el-button>
+                <el-button class="large" size="mini" type="primary" v-if="dialog.title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
+                <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
-    import saveOrUpdateDept from './saveOrUpdateDept';
-    import lookDept from './lookDept';
+    import noData from '../../../noData/noData';
     export default {
         name: "dept",
-        components:{saveOrUpdateDept,lookDept,noData},
+        components:{noData},
         data() {
             return {
                 searchForm:{
@@ -83,16 +83,14 @@
                     }
                 },
                 tableData: [],
-                saveOrUpdate:{
-                    visible:false,
-                    title:'增加',
-                    id:''
+                upsertForm:{
+                        id:'',
+                        deptName:'',
+                        deptId:'',
+                        createTime:'',
+                        updateTime:'',
                 },
-                look:{
-                    visible:false,
-                    id:''
-                },
-                rules: {
+                searchRules: {
                           deptName: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
@@ -105,7 +103,29 @@
                           updateTime: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                }
+                },
+                rules: {
+                          deptName: [
+                                  { required: true, message: '请输入部门名称', trigger: 'blur',transform:val=>val.trim() },
+                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                              ],
+                          deptId: [
+                                  { required: true, message: '请输入部门id', trigger: 'blur',transform:val=>val.trim() },
+                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                              ],
+                          createTime: [
+                                  { required: true, message: '请输入创建时间', trigger: 'blur',transform:val=>val.trim() },
+                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                              ],
+                          updateTime: [
+                                  { required: true, message: '请输入更新时间', trigger: 'blur',transform:val=>val.trim() },
+                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                              ],
+                },
+                dialog:{
+                    dialogFormVisible:false,
+                    title:'增加'
+                },
 
             }
         },
@@ -133,24 +153,68 @@
                 this.searchForm.pager.page=page;
                 this.submit();
             },
-            toSaveOrUpdate($event,id){
-                if(id){
-                    this.saveOrUpdate.title='修改';
-                    this.saveOrUpdate.id=id;
-                }else{
-                    this.saveOrUpdate.title='增加';
-                }
-                this.saveOrUpdate.visible=true;
+            showAddDialog(){
+                this.dialog.dialogFormVisible=true;
+                this.dialog.title='增加';
+                this.$nextTick(()=>{
+                    this.$refs.upsertForm.resetFields();
+                });
             },
-            closeSaveOrUpdate(data){
-                this.saveOrUpdate.visible=false;
-                data&&this.submit();
+            showUpdateDialog(id){
+                console.log(id);
+                axios({
+                    url:`api/dept/update/findDeptById/${id}`,
+                    method:'GET'
+                }).then(res=>{
+                    this.upsertForm=res.data;
+                    this.dialog.dialogFormVisible=true;
+                    this.dialog.title = '修改';
+                }).catch(error=>{
+
+                })
+
             },
-            toLook($event,id){
-                this.look={
-                    visible:true,
-                    id:id
-                }
+            saveOrUpdate(formName){
+                this.$refs[formName].validate(valid=>{
+                    if(valid){
+
+                        axios({
+                            url:`api/dept/findDeptListByCondition`,
+                            method:'POST',
+                            data:{
+                                deptName:this.upsertForm.deptName
+                            }
+                        }).then(res=>{
+                            let num =res.totalCount;
+                            if(num>0){
+                                this.$message.error('该部门已存在');
+                            } else {
+                                axios({
+                                    url:`api/dept/${this.dialog.title==='增加'?'saveDept':'update/updateDept'}`,
+                                    method:'POST',
+                                    data:this.upsertForm
+                                }).then(res=>{
+                                    this.$message({
+                                        message: this.dialog.title+'成功',
+                                        type: 'success'
+                                    });
+                                    this.$refs.upsertForm.resetFields();//清空校验
+                                    this.searchForm.pager.page=1;
+                                    this.dialog.dialogFormVisible = false;
+                                    this.submit();
+                                })
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
+                    }
+                })
+
+
+
+
+
             },
             deleteData(id){
                 this.$confirm('删除吗?', '提示', {
@@ -159,7 +223,7 @@
                     type: 'warning'
                 }).then(() => {
                     axios({
-                        url: `${home}/dept/deleteDept/${id}`,
+                        url: `api/dept/deleteDept/${id}`,
                         method: 'GET'
                     }).then(res => {
                         this.$message({
@@ -170,7 +234,6 @@
                     }).catch(error => {
 
                     })
-
                 }).catch(() => {
 
                 });
@@ -181,7 +244,7 @@
                 this.$refs['searchForm'].validate(valid=>{
                     if(valid){
                         axios({
-                            url:`${home}/dept/findDeptsByCondition`,
+                            url:`api/dept/findDeptsByCondition`,
                             method:'POST',
                             data:this.searchForm
                         }).then(res=>{
@@ -197,7 +260,6 @@
                         });
                     }
                 })
-
             },
             clear(){
                 this.$refs['searchForm'].resetFields();

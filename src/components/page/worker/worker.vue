@@ -7,7 +7,7 @@
                         <el-form-item label="真实姓名:" prop="name">
                             <el-input v-model="searchForm.name" placeholder="请输入真实姓名"></el-input>
                         </el-form-item>
-                         <el-form-item label="岗位:" prop="postName">
+                         <el-form-item label="岗位:" prop="postId">
                             <el-input v-model="searchForm.postId" placeholder="请输入岗位id"></el-input>
                         </el-form-item>
 
@@ -31,11 +31,11 @@
                     <el-table-column prop="deptName" label="部门" sortable="custom" ></el-table-column>
                     <el-table-column prop="postName" label="岗位" sortable="custom" ></el-table-column>
                     <el-table-column prop="workNumber" label="工号" sortable="custom" ></el-table-column>
-                <el-table-column fixed="right" label="操作" width="160"  >
+                    <el-table-column fixed="right" label="操作" width="210"  >
                     <template slot-scope="scope">
-                        <a  class="table-edit"  @click="toSaveOrUpdate($event,scope.row.id)">修改</a>
-                        <a  class="table-look"  @click="toLook($event,scope.row.id)">查看</a>
-                        <a  class="table-delete"  @click="deleteData(scope.row.id)">删除</a>
+                        <el-button  type="primary" round  @click="toLook($event,scope.row.id)">查看</el-button>
+                        <el-button  type="success" round  @click="toSaveOrUpdate($event,scope.row.id)">编辑</el-button>
+                        <el-button  type="danger" round  @click="deleteData(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
                 <div slot="empty"><no-data></no-data></div>
@@ -63,9 +63,10 @@
     import axios from 'axios';
     import saveOrUpdateWorker from './saveOrUpdateWorker';
     import lookWorker from './lookWorker';
+    import noData from '../../noData/noData';
     export default {
         name: "worker",
-        components:{saveOrUpdateWorker,lookWorker},
+        components:{saveOrUpdateWorker,lookWorker,noData},
         data() {
             return {
                 searchForm:{
@@ -172,6 +173,7 @@
                 this.submit();
             },
             toSaveOrUpdate($event,id){
+                console.log(id);
                 if(id){
                     this.saveOrUpdate.title='修改';
                     this.saveOrUpdate.id=id;
@@ -238,6 +240,7 @@
 
             },
             clear(){
+                console.log(this.$refs['searchForm'].resetFields())
                 this.$refs['searchForm'].resetFields();
             }
 
