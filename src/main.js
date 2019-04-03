@@ -99,6 +99,27 @@ new Vue({
 
             }
             return response.data;
+        }, function (error) {
+            // 对响应错误做点什么
+            // loading && loading.close();
+            loadingArray.forEach(item=>item.close())
+            loadingArray = []
+            if (400 == error.response.status) {
+                me.$alert(error.response.data.errors[0].defaultMessage, '错误', {
+                    confirmButtonText: '确定'
+                });
+            } else if (500 == error.response.status) {
+                me.$alert('服务器错误,请联系管理员', '错误', {
+                    confirmButtonText: '确定'
+                });
+            } else if (404 == error.response.status) {
+                me.$message({
+                    showClose: true,
+                    message: 'url路径错误',
+                    type: 'error'
+                });
+            }
+            return Promise.reject(error);
         } );
     },
     render: h => h(App)
