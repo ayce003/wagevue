@@ -64,11 +64,15 @@
                                     <span v-else>--</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column fixed="right" label="操作" width="120">
+                            <el-table-column fixed="right" label="操作" width="150">
                                 <template slot-scope="scope">
-                                    <a class="table-look" @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</a>
+                                    <el-button type="warning" round @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</el-button>
+                                    <el-button type="success" round  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</el-button>
+                                    <el-button type="info" round @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0"> 删除</el-button>
+
+                                   <!-- <a class="table-look" @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</a>
                                     <a class="table-edit"  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</a>
-                                    <a class="table-delete" plain @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0">删除</a>
+                                    <a class="table-delete" plain @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0">删除</a>-->
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -141,9 +145,9 @@
                         totalCount:0
                     }
                 },
-           /*     headers: {
+               headers: {
                     token: this.$store.getters.getToken
-                }, //导入信息时用到*/
+                }, //导入信息时用到
                 dialogUploadVisible: false, //导入信息时用到
                 dialogUploadErrorVisible: false, //导入信息时用到
                 uploadErrors: [], //导入异常
@@ -199,6 +203,7 @@
             },
             handleSalarySuccess(res, file){
                 this.loading.close();
+                console.log(res);
                 if (res.data.code == 200) {
                     this.dialogUploadVisible = false;
                     this.$message({
