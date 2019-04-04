@@ -115,19 +115,21 @@
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           postId: [
-                                  { required: true, message: '请输入岗位id', trigger: 'blur',transform:val=>val.trim() },
+                                  { required: true, message: '请输入岗位', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           email: [
                                   { required: true, message: '请输入邮箱', trigger: 'blur',transform:val=>val.trim() },
+                                  {pattern: "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$", message: "邮箱格式不正确", trigger: "blur"},
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           tel: [
                                   { required: true, message: '请输入手机', trigger: 'blur',transform:val=>val.trim() },
+                                  {pattern: "^1\\d{10}$", message: "请输入11位手机号", trigger: "blur"},
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           role: [
-                                  { required: true, message: '请输入角色(1', trigger: 'blur',transform:val=>val.trim() },
+                                  { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           name: [
@@ -135,7 +137,7 @@
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           departmentId: [
-                                  { required: true, message: '请输入部门id', trigger: 'blur',transform:val=>val.trim() },
+                                  { required: true, message: '请选择部门', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           workNumber: [
@@ -182,26 +184,45 @@
 
         },
         methods:{
+
             saveOrUpdate(formName){
                 this.$refs[formName].validate(valid=>{
                     if(valid){
-                        axios({
-                            url:`api/worker/${this.title==='增加'?'saveWorker':'update/updateWorker'}`,
-                            method:'POST',
-                            data:this.upsertForm
-                        }).then(res=>{
-                            this.$message({
-                                message: this.title+'成功',
-                                type: 'success'
-                            });
-                            this.$emit('closeSaveOrUpdate',true);
-                        }).catch(error=>{
-                            //do something
-                        })
 
+                        axios({
+                            url:`api/worker/findWorkerListByCondition`,
+                            method:'POST',
+                            data:{
+                                username:this.upsertForm.username
+                            }
+                        }).then(res=>{
+                            let num =res.totalCount;
+                            if(num>0){
+                                this.$message.error('该用户名已存在');
+                            } else {
+                                axios({
+                                    url:`api/worker/${this.title==='增加'?'saveWorker':'update/updateWorker'}`,
+                                    method:'POST',
+                                    data:this.upsertForm
+                                }).then(res=>{
+                                    this.$message({
+                                        message: this.title+'成功',
+                                        type: 'success'
+                                    });
+                                    this.$emit('closeSaveOrUpdate',true);
+                                })
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
 
                     }
                 })
+
+
+
+
+
             },
             close(){
                 this.$emit('closeSaveOrUpdate');
