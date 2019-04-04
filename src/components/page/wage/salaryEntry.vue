@@ -310,7 +310,10 @@
                     method:'POST',
                     data: {id:id,wageTypeId:typeid}
                 }).then(res=>{
-
+                    this.$message({
+                        type: 'success',
+                        message: '邮件已发送，请稍后查看'
+                    });
                 })
             },
             // 获取表格数据
