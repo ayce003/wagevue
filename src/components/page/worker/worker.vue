@@ -36,7 +36,7 @@
                     <el-table-column prop="deptName" label="部门" sortable="custom" ></el-table-column>
                     <el-table-column prop="postName" label="岗位" sortable="custom" ></el-table-column>
                     <el-table-column prop="workNumber" label="工号" sortable="custom" ></el-table-column>
-                    <el-table-column prop="role" label="角色" sortable="custom" ></el-table-column>
+                    <el-table-column prop="roleName" label="角色" sortable="custom" ></el-table-column>
                     <el-table-column fixed="right" label="操作" width="210"  >
                     <template slot-scope="scope">
                         <el-button  type="primary" round  @click="toLook($event,scope.row.id)">查看</el-button>
@@ -112,7 +112,8 @@
                       postId: '',
                       email: '',
                       tel: '',
-                      role: '',
+                      roleType: '',
+                      roleName: '',
                       name: '',
                       departmentId: '',
                       createTime: '',
@@ -170,9 +171,12 @@
                           tel: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                          role: [
+                          roleType: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
+                        roleName: [
+                            {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                        ],
                           name: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],

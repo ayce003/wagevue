@@ -40,9 +40,14 @@
                       <el-form-item label="头像" prop="imgUrl">
                          <el-input  v-model="upsertForm.imgUrl" auto-complete="off"></el-input>
                      </el-form-item>
-                      <el-form-item label="角色" prop="role">
+                     <!-- <el-form-item label="角色" prop="roleType">
                          <el-input  v-model="upsertForm.role" auto-complete="off"></el-input>
-                     </el-form-item>
+                     </el-form-item>-->
+                    <el-form-item label="角色" prop="roleType">
+                        <el-select v-model="upsertForm.roleType" @change="findRoleType" size="mini">
+                            <el-option v-for="item in roleTypeList" :key="item.roleType" :label="item.roleName" :value="item.roleType"></el-option>
+                        </el-select>
+                    </el-form-item>
 
 
 
@@ -73,7 +78,8 @@
                         postId:'',
                         email:'',
                         tel:'',
-                        role:'',
+                        roleType: '',
+                        roleName: '',
                         name:'',
                         departmentId:'',
                         createTime:'',
@@ -92,6 +98,7 @@
                 },
                 postList:[],
                 postForm:{},
+                roleTypeList:[],
 
                 rules: {
                           username: [
@@ -128,10 +135,14 @@
                                   {pattern: "^1\\d{10}$", message: "请输入11位手机号", trigger: "blur"},
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                          role: [
+                          roleType: [
                                   { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
+                            roleName: [
+                                { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() },
+                                {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                            ],
                           name: [
                                   { required: true, message: '请输入真实姓名', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
@@ -178,7 +189,7 @@
                 this.findPostList();
             }
 
-
+            this.findRoleType();
         },
         mounted(){
 
@@ -250,6 +261,18 @@
                         console.log(error);
                     });
             },
+
+
+            findRoleType(){
+                this.roleTypeList = [{
+                    roleType: '1',
+                    roleName: '管理员'
+                },{
+                    roleType: '2',
+                    roleName: '普通员工'
+                }]
+            },
+
             transPinyin(){
                 let n = this.upsertForm.name;
                 this.upsertForm.username = pinyinUtil.getPinyin(n,'',false);
