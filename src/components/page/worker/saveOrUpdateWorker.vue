@@ -120,7 +120,7 @@
                               ],
                           email: [
                                   { required: true, message: '请输入邮箱', trigger: 'blur',transform:val=>val.trim() },
-                                  {pattern: "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$", message: "邮箱格式不正确", trigger: "blur"},
+                                  {pattern: "^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$", message: "邮箱格式不正确", trigger: "blur"},
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           tel: [
@@ -196,7 +196,7 @@
                                 username:this.upsertForm.username
                             }
                         }).then(res=>{
-                            let num =res.totalCount;
+                            let num =res.data.length;
                             if(num>0){
                                 this.$message.error('该用户名已存在');
                             } else {
@@ -218,11 +218,6 @@
 
                     }
                 })
-
-
-
-
-
             },
             close(){
                 this.$emit('closeSaveOrUpdate');
