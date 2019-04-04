@@ -64,11 +64,12 @@
                                     <span v-else>--</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column fixed="right" label="操作" width="150">
+                            <el-table-column fixed="right" label="操作" width="250">
                                 <template slot-scope="scope">
                                     <el-button type="warning" round @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</el-button>
                                     <el-button type="success" round  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</el-button>
                                     <el-button type="info" round @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0"> 删除</el-button>
+                                    <el-button type="danger" round @click="sendDate(scope.row.id,salaryTypeId)" v-if="scope.row.release_state==0"> 发送邮箱</el-button>
 
                                    <!-- <a class="table-look" @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</a>
                                     <a class="table-edit"  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</a>
@@ -301,6 +302,16 @@
                 this.importXls.wageTypeId=this.salaryTypeId;
 
                 this.getTableData();
+            },
+            //发送邮箱
+            sendDate(id,typeid){
+                axios({
+                    url:`/api/wageTypeWorker/sendEmailToWorker`,
+                    method:'POST',
+                    data: {id:id,wageTypeId:typeid}
+                }).then(res=>{
+
+                })
             },
             // 获取表格数据
             getTableData() {
