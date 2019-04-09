@@ -108,7 +108,7 @@ export default new Router({
                 {
                     path: '/worker',
                     component: resolve => require(['../components/page/worker/worker.vue'], resolve),
-                    meta: { title: '学生管理' }
+                    meta: { title: '员工管理' }
                 },
                 {
                     path: '/dept',

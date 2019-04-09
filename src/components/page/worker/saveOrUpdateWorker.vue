@@ -4,52 +4,66 @@
             <el-breadcrumb-item></el-breadcrumb-item>
             <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
         </el-breadcrumb>
-        <el-form :model="upsertForm" size="mini" :rules="rules" ref="upsertForm" label-width="80px" style="margin-top: 20px;" >
+        <el-form :model="upsertForm" size="mini" :rules="rules" ref="upsertForm" label-width="80px"  style="margin-top: 20px;position: relative;" >
             <input type="hidden" :value="upsertForm.id">
-                    <el-form-item label="员工姓名" prop="name">
-                        <el-input  v-model="upsertForm.name" auto-complete="off" v-on:input="transPinyin" ></el-input>
+            <div class="avatar-uploader-div" style="position: absolute;left: 500px">
+                <el-tooltip class="item" effect="light" content="点击可以上传图片" placement="right">
+                    <el-row style="width:160px;">
+                        <el-upload align="center" class="avatar-uploader" :headers="{token:$store.getters.getToken}" :action="uploadAvatarUrl" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                            <img v-if="flag" :src="upsertForm.imgUrl" class="avatar">
+                            <img v-else src="../../../assets/img/avatar.png" class="avatar">
+                            <div class="el-upload__tip" slot="tip">支持png、jpg、jpeg等格式<p>大小不超过<strong style="color: #FE6A66">2MB</strong></p>
+                            </div>
+                        </el-upload>
+                    </el-row>
+                </el-tooltip>
+            </div>
+                    <el-form-item label="员工姓名" prop="name" style="width: 400px">
+                        <el-input  v-model="upsertForm.name" auto-complete="off" v-on:input="transPinyin"></el-input>
                     </el-form-item>
-                    <el-form-item label="用户名" prop="username">
+                    <el-form-item label="用户名" prop="username" style="width: 400px">
                         <el-input  v-model="upsertForm.username" auto-complete="off"></el-input>
                     </el-form-item>
-                      <el-form-item label="性别" prop="sex">
+                     <!-- <el-form-item label="性别" prop="sex">
                          <el-input  v-model="upsertForm.sex" auto-complete="off"></el-input>
-                     </el-form-item>
-                      <el-form-item label="年龄" prop="age">
+                     </el-form-item>-->
+                    <el-form-item label="性别" prop="sex" >
+                        <el-radio v-for="item in sexList" :key="item.sex" v-model="upsertForm.sex" :label="item.sex">{{item.sex}}</el-radio>
+                    </el-form-item>
+                      <el-form-item label="年龄" prop="age" style="width: 400px">
                          <el-input  v-model="upsertForm.age" auto-complete="off"></el-input>
                      </el-form-item>
-                    <el-form-item label="邮箱" prop="email">
+                    <el-form-item label="邮箱" prop="email" style="width: 400px">
                         <el-input  v-model="upsertForm.email" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机" prop="tel">
+                    <el-form-item label="手机" prop="tel" style="width: 400px">
                         <el-input  v-model="upsertForm.tel" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="部门" prop="deptName">
+                    <el-form-item label="部门" prop="departmentId" >
                         <el-select v-model="upsertForm.departmentId" @change="findDeptList" size="mini">
                             <el-option v-for="item in deptList" :key="item.deptId" :label="item.deptName" :value="item.deptId"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="岗位" prop="postName">
+                    <el-form-item label="岗位" prop="postId">
                         <el-select v-model="upsertForm.postId" @change="findPostList" size="mini">
                             <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="工号" prop="workNumber">
+                    <el-form-item label="工号" prop="workNumber" style="width: 400px">
                         <el-input  v-model="upsertForm.workNumber" auto-complete="off"></el-input>
                     </el-form-item>
-                      <el-form-item label="头像" prop="imgUrl">
+                      <!--<el-form-item label="头像" prop="imgUrl">
                          <el-input  v-model="upsertForm.imgUrl" auto-complete="off"></el-input>
-                     </el-form-item>
-                     <!-- <el-form-item label="角色" prop="roleType">
-                         <el-input  v-model="upsertForm.role" auto-complete="off"></el-input>
                      </el-form-item>-->
-                    <el-form-item label="角色" prop="roleType">
+
+                    <!--<el-form-item label="角色" prop="roleType">
                         <el-select v-model="upsertForm.roleType" @change="findRoleType" size="mini">
                             <el-option v-for="item in roleTypeList" :key="item.roleType" :label="item.roleName" :value="item.roleType"></el-option>
                         </el-select>
+                    </el-form-item>-->
+                    <el-form-item label="角色" prop="roleType">
+                        <el-radio v-for="item in roleTypeList" :key="item.roleType" v-model="upsertForm.roleType" :label="item.roleType">{{item.roleName}}</el-radio>
                     </el-form-item>
-
-
 
         </el-form>
         <div  class="dialog-footer" style="text-align: center;">
@@ -99,6 +113,9 @@
                 postList:[],
                 postForm:{},
                 roleTypeList:[],
+                sexList:[],
+                uploadAvatarUrl: `api/worker/uploadAvatar`,
+                flag: false,
 
                 rules: {
                           username: [
@@ -117,13 +134,9 @@
                                   { required: true, message: '请输入年龄', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                          imgUrl: [
-                                  { required: true, message: '请输入头像', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          postId: [
-                                  { required: true, message: '请输入岗位', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+
+                            postId: [
+                                  { required: true, message: '请选择岗位', trigger: 'blur',transform:val=>val.trim() },
                               ],
                           email: [
                                   { required: true, message: '请输入邮箱', trigger: 'blur',transform:val=>val.trim() },
@@ -147,7 +160,7 @@
                                   { required: true, message: '请输入真实姓名', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                          departmentId: [
+                           departmentId: [
                                   { required: true, message: '请选择部门', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
@@ -159,6 +172,11 @@
                                   { required: true, message: '请输入更新时间', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
+                            imgUrl: [
+                                { required: true, message: '请输入头像', trigger: 'blur',transform:val=>val.trim() },
+                                {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                            ],
+
                 }
             }
         },
@@ -190,6 +208,7 @@
             }
 
             this.findRoleType();
+            this.getSexList();
         },
         mounted(){
 
@@ -272,6 +291,11 @@
                     roleName: '普通员工'
                 }]
             },
+            getSexList(){
+                this.sexList=[
+                    {sex:'男'},
+                    {sex:'女'}]
+            },
 
             transPinyin(){
                 let n = this.upsertForm.name;
@@ -282,6 +306,28 @@
                 this.$emit('closeSaveOrUpdate');
             },
 
+
+            /*--------------------图片上传------------------------------*/
+            handleAvatarSuccess(res, file) {
+                //图片上传
+                this.upsertForm.imgUrl = res;
+                console.log("图片地址:"+this.upsertForm.imgUrl);
+                this.flag = true;
+            },
+
+            beforeAvatarUpload(file) {
+                const isJPG =
+                    file.type === "image/jpeg" || file.type === "image/png";
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isJPG) {
+                    this.$message.error("上传头像图片只能是 JPEG/JPG/PNG 格式!");
+                }
+                if (!isLt2M) {
+                    this.$message.error("上传头像图片大小不能超过 2MB!");
+                }
+                return isJPG && isLt2M;
+            },
+
         }
     }
 </script>
@@ -290,4 +336,33 @@
     .saveOrUpdateCrud{
         margin: 20px 0 0 10px;
     }
+
+    .avatar-uploader-div {
+        position: absolute;
+        right: 850px;
+        z-index: 2000;
+    }
+    /deep/ .el-upload {
+        background-color: #f0f0f0;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409eff;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 108px;
+        height: 108px;
+        line-height: 108px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 108px;
+        height: 108px;
+        display: block;
+        border-radius: 50%;
+    }
+
 </style>

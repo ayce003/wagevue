@@ -1,32 +1,42 @@
 <template>
     <div class="margin-40-60-0">
-        <div v-show="!saveOrUpdate.visible&&!look.visible">
+        <div v-show="!saveOrUpdate.visible">
             <!--搜索表单-->
             <div class="search-box">
                 <el-form ref="searchForm" size="mini" :rules="rules" :inline="true" :model="searchForm" >
                         <el-form-item label="真实姓名:" prop="name">
                             <el-input v-model="searchForm.name" placeholder="请输入真实姓名"></el-input>
                         </el-form-item>
-                         <el-form-item label="岗位:" prop="postId">
-                            <el-input v-model="searchForm.postId" placeholder="请输入岗位id"></el-input>
+                        <el-form-item label="岗位" prop="postId">
+                            <el-select v-model="searchForm.postId" @change="findPostList" placeholder="请选择岗位" size="mini">
+                                <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
+                            </el-select>
                         </el-form-item>
+
 
                     <el-form-item>
                         <el-button  type="primary" id="findBtn" @click="submit(1)">查询</el-button>
                         <el-button  type="warning" plain @click="clear">清空</el-button>
                     </el-form-item>
-                    <el-button class="el-icon-lx-add" type="primary" size="mini"   @click="toSaveOrUpdate" >新增</el-button>
-                    <el-button-group style="vertical-align:top">
-                        <el-button type="clear" class="el-icon-lx-down" @click="dialogUploadVisible=true">导入</el-button>
-                        <el-button type="common" class="el-icon-lx-top" @click="exportStudent">导出</el-button>
-                    </el-button-group>
+
                 </el-form>
+
+                            <el-button-group style="float:right;vertical-align:top">
+                                <el-button type="clear" class="el-icon-lx-down" @click="dialogUploadVisible=true">导入</el-button>
+                                <el-button type="success" class="el-icon-lx-top" @click="exportStudent">导出</el-button>
+                            </el-button-group>
+                            <el-button class="el-icon-lx-add" type="primary" style="float:right;margin-bottom:10px"  @click="toSaveOrUpdate" >新增</el-button>
 
              </div>
 
             <!--表格-->
             <el-table class="table-ui" :stripe="true" :data="tableData"  @sort-change="sortChange" >
-                    <el-table-column prop="imgUrl" label="头像" sortable="custom" ></el-table-column>
+                    <el-table-column prop="imgUrl" label="头像" width="100">
+                        <template slot-scope="scope">
+                            <img v-if="scope.row.imgUrl" class="avatar" width="60" height="60" :src="scope.row.imgUrl">
+                            <img v-else src="../../../assets/img/avatar.png" width="60" height="60" class="avatar">
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="name" label="真实姓名" sortable="custom" ></el-table-column>
                     <el-table-column prop="username" label="用户名" sortable="custom" ></el-table-column>
                     <el-table-column prop="sex" label="性别" sortable="custom" ></el-table-column>
@@ -39,7 +49,6 @@
                     <el-table-column prop="roleName" label="角色" sortable="custom" ></el-table-column>
                     <el-table-column fixed="right" label="操作" width="210"  >
                     <template slot-scope="scope">
-                        <el-button  type="primary" round  @click="toLook($event,scope.row.id)">查看</el-button>
                         <el-button  type="success" round  @click="toSaveOrUpdate($event,scope.row.id)">编辑</el-button>
                         <el-button  type="danger" round  @click="deleteData(scope.row.id)">删除</el-button>
                     </template>
@@ -61,7 +70,6 @@
             ></el-pagination>
         </div>
         <save-or-update-worker v-if="saveOrUpdate.visible" v-bind="saveOrUpdate" @closeSaveOrUpdate="closeSaveOrUpdate"></save-or-update-worker>
-        <look-worker v-if="look.visible" v-bind="look" :visible.sync="look.visible"></look-worker>
 
         <!--导入员工模板-->
         <el-dialog top="15vh" title="批量导入" width="460px" height="250px" :visible.sync="dialogUploadVisible">
@@ -96,11 +104,10 @@
     import axios from 'axios';
     import fileDownload from "js-file-download";
     import saveOrUpdateWorker from './saveOrUpdateWorker';
-    import lookWorker from './lookWorker';
     import noData from '../../noData/noData';
     export default {
         name: "worker",
-        components:{saveOrUpdateWorker,lookWorker,noData},
+        components:{saveOrUpdateWorker,noData},
         data() {
             return {
                 searchForm:{
@@ -130,6 +137,8 @@
                     }
                 },
                 tableData: [],
+                postList:[],
+                postForm:{},
                 saveOrUpdate:{
                     visible:false,
                     title:'增加',
@@ -194,6 +203,7 @@
             }
         },
         created(){
+            this.findPostList();
         },
         mounted(){
             let findBtn=document.querySelector('#findBtn');
@@ -244,7 +254,7 @@
                     type: 'warning'
                 }).then(() => {
                     axios({
-                        url: `${home}/worker/deleteWorker/${id}`,
+                        url: `api/worker/deleteWorker/${id}`,
                         method: 'GET'
                     }).then(res => {
                         this.$message({
@@ -287,6 +297,20 @@
             clear(){
                 console.log(this.$refs['searchForm'].resetFields())
                 this.$refs['searchForm'].resetFields();
+            },
+            findPostList() {
+                this.postList = [];
+                axios({
+                    url: `api/post/findPostListByCondition`, //岗位
+                    method: "POST",
+                    data:this.postForm
+                })
+                    .then(res => {
+                        this.postList = res.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
             },
 
             /*-------------------------------------批量导入相关方法------------------------------------------------------------*/
@@ -356,3 +380,12 @@
         }
     }
 </script>
+
+<style scoped>
+    .avatar {
+        width: 78px;
+        height: 78px;
+        display: block;
+        border-radius: 50%;
+    }
+</style>

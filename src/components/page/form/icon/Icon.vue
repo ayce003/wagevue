@@ -216,7 +216,7 @@ ul,li{
 }
 .icon-li-content i{
     font-size: 36px;
-    color: #606266;
+    color: #ffffff;
 }
 .icon-li-content span{
     margin-top: 10px;

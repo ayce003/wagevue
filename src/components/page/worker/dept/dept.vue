@@ -2,9 +2,7 @@
     <div class="margin-40-60-0">
         <!--搜索表单-->
         <div class="search-box">
-            <el-row>
                 <el-form ref="searchForm" size="mini" :rules="searchRules" :inline="true" :model="searchForm" >
-                    <el-col :span="22">
                         <el-form-item label="部门名称:" prop="deptName">
                             <el-input v-model="searchForm.deptName" placeholder="请输入部门名称"></el-input>
                         </el-form-item>
@@ -12,16 +10,12 @@
                             <el-button  type="primary" id="findBtn"  @click="submit(1)">查询</el-button>
                             <el-button  type="warning" plain @click="clear">清空</el-button>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="2">
-                        <el-button class="iconfont icon-tianjia" type="primary" size="mini"   @click="showAddDialog">新增部门</el-button>
-                    </el-col>
+                        <el-button class="iconfont icon-tianjia" type="primary" size="mini" style="float:right;"  @click="showAddDialog">新增部门</el-button>
                 </el-form>
-            </el-row>
          </div>
         <!--表格-->
         <el-table class="table-ui" :stripe="true"  :data="tableData"  @sort-change="sortChange" >
-                <el-table-column type="index" width="100" label="id" ></el-table-column>
+                <el-table-column type="index" width="100" label="序号" ></el-table-column>
                 <el-table-column prop="deptName" label="部门名称" sortable="custom" ></el-table-column>
             <el-table-column fixed="right" label="操作" width="160"  >
                 <template slot-scope="scope">
