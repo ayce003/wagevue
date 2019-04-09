@@ -74,7 +74,7 @@
         <!--导入员工模板-->
         <el-dialog top="15vh" title="批量导入" width="460px" height="250px" :visible.sync="dialogUploadVisible">
             <el-row>
-                <el-button type="common" style="height: 50px;text-align: center;width: 100%;border-radius: 5px;"
+                <el-button type="success" style="height: 50px;text-align: center;width: 100%;border-radius: 5px;"
                            @click="exportTemplate">点击下载模板
                 </el-button>
             </el-row>

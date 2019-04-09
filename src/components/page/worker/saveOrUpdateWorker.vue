@@ -19,10 +19,10 @@
                 </el-tooltip>
             </div>
                     <el-form-item label="员工姓名" prop="name" style="width: 400px">
-                        <el-input  v-model="upsertForm.name" auto-complete="off" v-on:input="transPinyin"></el-input>
+                        <el-input  v-model="upsertForm.name" auto-complete="off" v-on:input="transPinyin" :disabled="saveOrUpdateVisible"></el-input>
                     </el-form-item>
                     <el-form-item label="用户名" prop="username" style="width: 400px">
-                        <el-input  v-model="upsertForm.username" auto-complete="off"></el-input>
+                        <el-input  v-model="upsertForm.username" auto-complete="off" :disabled="saveOrUpdateVisible"></el-input>
                     </el-form-item>
                      <!-- <el-form-item label="性别" prop="sex">
                          <el-input  v-model="upsertForm.sex" auto-complete="off"></el-input>
@@ -68,8 +68,8 @@
         </el-form>
         <div  class="dialog-footer" style="text-align: center;">
             <el-button class="large" size="mini" @click="close">取 消</el-button>
-            <el-button class="large" size="mini" type="primary" v-if="title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
-            <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
+            <el-button class="large" size="mini" type="primary" v-if="title=='增加'"  @click="save('upsertForm')">确 定</el-button>
+            <el-button class="large" size="mini" type="primary" v-else  @click="update('upsertForm')">确 定</el-button>
         </div>
 
     </div>
@@ -116,6 +116,8 @@
                 sexList:[],
                 uploadAvatarUrl: `api/worker/uploadAvatar`,
                 flag: false,
+                saveOrUpdateVisible:false,
+
 
                 rules: {
                           username: [
@@ -209,13 +211,22 @@
 
             this.findRoleType();
             this.getSexList();
+            this.isSaveOrUpdate();
         },
         mounted(){
 
         },
         methods:{
 
-            saveOrUpdate(formName){
+            isSaveOrUpdate(){
+                if(this.title==='增加'){
+                    this.saveOrUpdateVisible = false;
+                }else {
+                    this.saveOrUpdateVisible = true;
+                }
+            },
+
+            save(formName){
                 this.$refs[formName].validate(valid=>{
                     if(valid){
 
@@ -247,6 +258,22 @@
                         });
 
                     }
+                })
+            },
+
+            update(formName){
+                this.$refs[formName].validate(valid=>{
+                    axios({
+                        url:`api/worker/update/updateWorker`,
+                        method:'POST',
+                        data:this.upsertForm
+                    }).then(res=>{
+                        this.$message({
+                            message: this.title+'成功',
+                            type: 'success'
+                        });
+                        this.$emit('closeSaveOrUpdate',true);
+                    })
                 })
             },
             close(){
