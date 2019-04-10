@@ -43,7 +43,7 @@
                         index: 'dashboard',
                         title: '系统首页'
                     },
-                    {
+                   /* {
                         icon: 'el-icon-lx-calendar',
                         index: '3',
                         title: '表单相关',
@@ -101,8 +101,8 @@
                                 ]
                             }
                         ]
-                    },
-                    {
+                    },*/
+                    /*{
                         icon: 'el-icon-lx-warn',
                         index: '7',
                         title: '错误处理',
@@ -116,7 +116,7 @@
                                 title: '404页面'
                             }
                         ]
-                    },
+                    },*/
                     {
                         icon: 'el-icon-rank',
                         index: 'wage',
