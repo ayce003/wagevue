@@ -20,10 +20,10 @@ export default new Vuex.Store({
             return state.token;
         },
         getWorker(state) {
-            if (!state.worker.id && !sessionStorage.getItem('worker')) {
+            if (!state.worker && !sessionStorage.getItem('worker')) {
                 return null;
             }
-            if (!state.worker.id) {
+            if (!state.worker) {
                 state.worker = JSON.parse(sessionStorage.getItem('worker'));
             }
             return state.worker;
