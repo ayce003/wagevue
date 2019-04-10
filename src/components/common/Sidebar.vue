@@ -64,6 +64,7 @@
             return {
                 collapse: false,
                 role:this.$store.getters.getWorker.roleType,
+                token: this.$store.getters.getToken,
                 items: [
                     {
                         icon: 'el-icon-lx-home',
@@ -206,6 +207,8 @@
             bus.$on('collapse', msg => {
                 this.collapse = msg;
             })
+            console.log(this.role);
+            console.log(this.token);
         }
     }
 </script>

@@ -65,6 +65,7 @@
             handleCommand(command) {
                 if(command == 'loginout'){
                     localStorage.removeItem('ms_username')
+                    this.$store.commit("clearStore");
                     this.$router.push('/login');
                 }
             },

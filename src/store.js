@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         token: '',
         perms:[],
-        teacher: {}
+        worker: {}
     },
     getters:{
         getToken(state){
@@ -20,10 +20,10 @@ export default new Vuex.Store({
             return state.token;
         },
         getWorker(state) {
-            if (!state.worker && !sessionStorage.getItem('worker')) {
+            if (!state.worker.id && !sessionStorage.getItem('worker')) {
                 return null;
             }
-            if (!state.worker) {
+            if (!state.worker.id) {
                 state.worker = JSON.parse(sessionStorage.getItem('worker'));
             }
             return state.worker;
@@ -42,17 +42,15 @@ export default new Vuex.Store({
 
         clearStore(state){
             state.token='';
+            state.worker={};
             sessionStorage.clear();
         }
     },
     actions: {
         setToken({commit},token){
             commit('setToken',token);
-            sessionStorage.setItem('token',token);
         },
-        setWorker({
-                       commit
-                   }, worker) {
+        setWorker({commit}, worker) {
             commit('setWorker', worker);
         }
     }

@@ -63,7 +63,6 @@
                             /*   token: obj.getToken()*/
                         }
                     }).then(res => {
-                        console.log(res);
                         if (!res.result.success) {
                             /*   obj.reset();*/
                             this.ruleForm.username = '';
