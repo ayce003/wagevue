@@ -424,13 +424,11 @@
                             method: 'POST',
                             data:{wageTypeId:typeid,selAllEmail:this.selAllEmail}
                         }).then(res => {
-                            if(res.data=='success'){
                                 this.$message({
                                     type: 'success',
-                                    message: res.data2
+                                    message: "邮件发送成功"
                                 });
                                 this.getTableData();
-                            }
                         }).catch(error => {
                             console.log(error);
                         })
