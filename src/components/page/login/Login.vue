@@ -77,6 +77,7 @@
                             return;
                         }
                         this.$store.commit('setToken', res.data);
+                        this.$store.commit('setWorker', res.data2);
                         this.$router.push('/');
                     })
                 });

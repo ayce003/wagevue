@@ -171,6 +171,7 @@
             bus.$on('collapse', msg => {
                 this.collapse = msg;
             })
+            console.log(this.$store.getters.getWorker.roleType);
         }
     }
 </script>

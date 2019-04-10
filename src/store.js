@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         token: '',
-        perms:[]
+        perms:[],
+        teacher: {}
     },
     getters:{
         getToken(state){
@@ -17,6 +18,15 @@ export default new Vuex.Store({
                 state.token=sessionStorage.getItem('token');
             }
             return state.token;
+        },
+        getWorker(state) {
+            if (!state.worker.id && !sessionStorage.getItem('worker')) {
+                return null;
+            }
+            if (!state.worker.id) {
+                state.worker = JSON.parse(sessionStorage.getItem('worker'));
+            }
+            return state.worker;
         }
 
     },
@@ -24,6 +34,10 @@ export default new Vuex.Store({
         setToken(state,token){
             state.token=token;
             sessionStorage.setItem('token',token);
+        },
+        setWorker(state, worker) {
+            state.worker = worker;
+            sessionStorage.setItem('worker', JSON.stringify(worker));
         },
 
         clearStore(state){
@@ -35,6 +49,11 @@ export default new Vuex.Store({
         setToken({commit},token){
             commit('setToken',token);
             sessionStorage.setItem('token',token);
+        },
+        setWorker({
+                       commit
+                   }, worker) {
+            commit('setWorker', worker);
         }
     }
 })
