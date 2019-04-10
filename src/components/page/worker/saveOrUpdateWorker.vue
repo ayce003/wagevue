@@ -189,6 +189,9 @@
                   method:'GET'
               }).then(res=>{
                   Object.assign(this.upsertForm,res.data);
+                  if (this.upsertForm.imgUrl != null) {
+                      this.flag = true;
+                  }
               }).catch(error=>{
 
               })

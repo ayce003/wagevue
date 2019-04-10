@@ -373,7 +373,7 @@
                     data: this.searchForm,
                     responseType: "arraybuffer"
                 }).then(res => {
-                    fileDownload(res, "学生.xls");
+                    fileDownload(res, "员工信息.xls");
                 }).catch(error => { });
             },
 
