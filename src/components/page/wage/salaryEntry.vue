@@ -42,6 +42,7 @@
                                     </el-button-group>
                                     <el-button type="primary" id="grantBtn" @click="grantSalary()" style="margin-left:20px;">发放工资</el-button>
                                     <el-button type="primary"  @click="sendAllEmail(salaryTypeId)" style="margin-left:20px;">一键发送邮箱</el-button>
+                                    <el-button type="primary"  @click="sendAllTel(salaryTypeId)" style="margin-left:20px;">一键发送短信</el-button>
                                 </el-form-item>
                             </div>
                         </el-form>
@@ -169,6 +170,7 @@
                 activeIndex: 0, //默认显示第一个工资类型
                 selAllWorkId:[], //选中的要发放工资的职工
                 selAllEmail:[],//选中的邮箱
+                selAllTel:[],//选中的手机号
                 releaseState:'', //发放工资后的状态
             }
         },
@@ -276,6 +278,7 @@
             selAllSalaryId(val){
                 this.selAllWorkId = val.map(obj =>obj.id);
                 this.selAllEmail = val.map(obj =>obj.email);
+                this.selAllTel = val.map(obj =>obj.tel);
             },
 
             // 获取左侧工资类型
@@ -445,6 +448,40 @@
                     });
                 }
             },
+            sendAllTel(typeid){
+                if(this.selAllTel.length>0){
+                    this.$confirm('确定发送工资条给以下职工么?', '温馨提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        axios({
+                            url: `/api/wageTypeWorker/sendSalaryToAllTel`,
+                            method: 'POST',
+                            data:{wageTypeId:typeid,selAllTel:this.selAllTel}
+                        }).then(res => {
+                            this.$message({
+                                type: 'success',
+                                message: "短信发送成功"
+                            });
+                            this.getTableData();
+                        }).catch(error => {
+                            console.log(error);
+                        })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消发送'
+                        });
+                    });
+                }else{
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择职工!'
+                    });
+                }
+            },
+
             //删除工资条
             deleteData(id){
                 this.$confirm('确定删除吗?', '提示', {
