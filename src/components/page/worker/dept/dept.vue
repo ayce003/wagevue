@@ -1,166 +1,137 @@
 <template>
-    <div class="margin-40-60-0">
-        <!--搜索表单-->
-        <div class="search-box">
-                <el-form ref="searchForm" size="mini" :rules="searchRules" :inline="true" :model="searchForm" >
-                        <el-form-item label="部门名称:" prop="deptName">
-                            <el-input v-model="searchForm.deptName" placeholder="请输入部门名称"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button  type="primary" id="findBtn"  @click="submit(1)">查询</el-button>
-                            <el-button  type="warning" plain @click="clear">清空</el-button>
-                        </el-form-item>
-                        <el-button class="iconfont icon-tianjia" type="primary" size="mini" style="float:right;"  @click="showAddDialog">新增部门</el-button>
-                </el-form>
-         </div>
-        <!--表格-->
-        <el-table class="table-ui" :stripe="true"  :data="tableData"  @sort-change="sortChange" >
-                <el-table-column type="index" width="100" label="序号" ></el-table-column>
-                <el-table-column prop="deptName" label="部门名称" sortable="custom" ></el-table-column>
-            <el-table-column fixed="right" label="操作" width="160"  >
-                <template slot-scope="scope">
-                    <el-button    type="success" round @click="showUpdateDialog(scope.row.id)">编辑</el-button>
-                    <el-button  type="danger" round @click="deleteData(scope.row.id)">删除</el-button>
-                </template>
-            </el-table-column>
-            <div slot="empty"><no-data></no-data></div>
-        </el-table>
-        <el-pagination
-                style="margin-top: 10px;padding-bottom: 20px;"
-                background
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="searchForm.pager.totalCount"
-                :page-size="searchForm.pager.pageSize"
-                :current-page.sync="searchForm.pager.page"
-                :page-sizes="[10, 20, 30, 40, 50, 100]"
-                @size-change="sizeChange"
-                @current-change="currentChange"
-                @prev-click="currentChange"
-                @next-click="currentChange"
-        ></el-pagination>
+    <div>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>
+                    部门管理树
+                </span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="showAddDialog">添加部门</el-button>
+            </div>
+            <el-tree
+                    @node-drop="handleDrop"
+                    :props="defaultProps"
+                    :data="perms"
+                    node-key="id"
+                    :default-expanded-keys="openKeys"
+                    :expand-on-click-node="false">
+                      <span class="custom-tree-node" slot-scope="{ node, data }">
+                      <template>
+                          <span>
+                              {{data.deptName}}
+                          </span>
+                      </template>
+                        <span >
+                          <el-button type="text" size="mini" @click="() => appendChild(data)">添加子部门</el-button>
+                          <el-button type="text" size="mini" @click="() => updatePerm(data)">编辑</el-button>
+                          <el-button type="text" size="mini" @click="() => deleteData(data.id,data.parentId)">删除</el-button>
+                        </span>
+                      </span>
+            </el-tree>
+        </el-card>
         <!--添加或者修改表单-->
-        <el-dialog  :title="dialog.title"   width="650px" :visible.sync="dialog.dialogFormVisible">
-            <el-form class="upsertForm" size="mini" :model="upsertForm" :rules="rules" ref="upsertForm" label-width="80px" >
+        <el-dialog   :title="dialog.title"  width="650px"  :visible.sync="dialog.dialogFormVisible">
+            <el-form class="upsertForm" :model="upsertForm" :rules="rules" ref="upsertForm" label-width="80px" >
                 <input type="hidden" :value="upsertForm.id">
-                          <el-form-item label="部门名称" prop="deptName">
-                             <el-input  v-model="upsertForm.deptName" auto-complete="off"></el-input>
-                         </el-form-item>
+                <input type="hidden" :value="upsertForm.parentId"/>
+                <el-form-item label="部门名称" prop="deptName">
+                    <el-input v-model="upsertForm.deptName" auto-complete="off"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="large" size="mini" @click="dialog.dialogFormVisible = false">取 消</el-button>
-                <el-button class="large" size="mini" type="primary" v-if="dialog.title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
-                <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
+                <el-button @click="dialog.dialogFormVisible = false">取 消</el-button>
+                <el-button v-if="dialog.title=='增加'" type="primary" @click="saveOrUpdate('upsertForm')">确 定</el-button>
+                <el-button v-else  type="primary" @click="saveOrUpdate('upsertForm')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    /**
+     * 学校总权限
+     */
     import axios from 'axios';
-    import noData from '../../../noData/noData';
     export default {
-        name: "dept",
-        components:{noData},
+        name: "dept1",
         data() {
             return {
-                searchForm:{
-                      deptName: '',
-                      deptId: '',
-                      createTime: '',
-                      updateTime: '',
-                    pager:{
-                        sortField:'',
-                        sortOrder:'',
-                        page:1,
-                        pageSize:10,
-                        totalCount:0
-                    }
+                iconDialog:{
+                    visible:false,
+                    iconList:[],
+                    searchKey:''
                 },
-                tableData: [],
-                upsertForm:{
-                        id:'',
-                        deptName:'',
-                        deptId:'',
-                        createTime:'',
-                        updateTime:'',
-                },
-                searchRules: {
-                          deptName: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          deptId: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          createTime: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          updateTime: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                },
-                rules: {
-                          deptName: [
-                                  { required: true, message: '请输入部门名称', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          deptId: [
-                                  { required: true, message: '请输入部门id', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          createTime: [
-                                  { required: true, message: '请输入创建时间', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          updateTime: [
-                                  { required: true, message: '请输入更新时间', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
+                perms: [],
+                openKeys:[],
+                defaultProps: {
+                    id: "id",
+                    label: "deptName",
+                    children: 'children',
                 },
                 dialog:{
                     dialogFormVisible:false,
-                    title:'增加'
+                    title:'增加',
+                    showAutoBtn:true
                 },
-
+                upsertForm:{
+                    id:'',
+                    deptName: '',
+                    parentId: '',
+                    level: 0,
+                    leaf: 0,
+                    path: '',
+                    deptId: '',
+                    sort: 0,
+                    createTime: '',
+                    updateTime: '',
+                },
+                rules: {
+                    deptName: [
+                        { required: true, message: '请输入部门名称', trigger: 'blur',transform:val=>val.trim()  }
+                    ]
+                }
             }
         },
         created(){
-        },
-        mounted(){
-            let findBtn=document.querySelector('#findBtn');
-            if(findBtn){
-                this.searchForm.pager.sortField='id';
-                this.searchForm.pager.sortOrder='desc';
-                this.submit();
-            }
+            this.loadPerms();
         },
         methods: {
-            sortChange({ column, prop, order }){
-                this.searchForm.pager.sortField=prop;
-                this.searchForm.pager.sortOrder=order?order.replace(/ending$/,''):'';
-                this.submit();
+            handleDrop(draggingNode, dropNode, dropType, ev) {
+                axios({
+                    url:`${home}/schoolPerm/updateSchoolPerm`,
+                    method:'POST',
+                    data:Object.assign(draggingNode.data,{parentId:dropType==='inner'?dropNode.data.id:dropNode.data.parentId})
+                })
             },
-            sizeChange(pageSize){
-                this.searchForm.pager.pageSize=pageSize;
-                this.submit();
+            loadPerms(id){
+                axios({
+                    url:`api/dept/findDeptsTreeByCondition`,
+                    method:'GET'
+                }).then(res=>{
+                    this.perms=res.data;
+                    if(id){
+                        this.openKeys = [id];
+                    }
+                }).catch(error=>{
+                })
             },
-            currentChange(page){
-                this.searchForm.pager.page=page;
-                this.submit();
-            },
-            showAddDialog(){
+            showAddDialog(e,pId){
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
-                this.$nextTick(()=>{
-                    this.$refs.upsertForm.resetFields();
-                });
+                //objUtil.setToDefault(this.upsertForm);
+                this.upsertForm.parentId=pId;
+            },
+            appendChild({id:id}){
+                this.showAddDialog(undefined, id);
+            },
+            updatePerm({id:id}){
+                this.showUpdateDialog(id);
             },
             showUpdateDialog(id){
-                console.log(id);
                 axios({
                     url:`api/dept/update/findDeptById/${id}`,
                     method:'GET'
                 }).then(res=>{
-                    this.upsertForm=res.data;
+                    Object.assign(this.upsertForm, res.data);
                     this.dialog.dialogFormVisible=true;
                     this.dialog.title = '修改';
                 }).catch(error=>{
@@ -173,16 +144,22 @@
                     if(valid){
 
                         axios({
-                            url:`api/dept/findDeptListByCondition`,
+                            url:`api/dept/findDeptsByCondition`,
                             method:'POST',
                             data:{
-                                deptName:this.upsertForm.deptName
+                                deptName:this.upsertForm.deptName,
+                                parentId:this.upsertForm.parentId,
                             }
                         }).then(res=>{
-                            let num =res.totalCount;
+                            let num = res.data.length;
                             if(num>0){
-                                this.$message.error('该部门已存在');
-                            } else {
+                                this.$message({
+                                type: 'warning',
+                                message: '该部门名已存在'
+                                });
+                                this.$refs.upsertForm.resetFields();//清空
+                                this.dialog.dialogFormVisible = false;
+                            }else {
                                 axios({
                                     url:`api/dept/${this.dialog.title==='增加'?'saveDept':'update/updateDept'}`,
                                     method:'POST',
@@ -192,26 +169,22 @@
                                         message: this.dialog.title+'成功',
                                         type: 'success'
                                     });
-                                    this.$refs.upsertForm.resetFields();//清空校验
-                                    this.searchForm.pager.page=1;
                                     this.dialog.dialogFormVisible = false;
-                                    this.submit();
-                                })
+                                    this.loadPerms(this.upsertForm.id?this.upsertForm.id:this.upsertForm.parentId);
+                                    this.$refs.upsertForm.resetFields();//清空
+                                });
+
                             }
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
+
+                        }).catch(error=>{
+                            //do something
+                        })
 
                     }
                 })
-
-
-
-
-
             },
-            deleteData(id){
-                this.$confirm('删除吗?', '提示', {
+            deleteData(id,parentId){
+                this.$confirm('删除吗?删除将删除地下所有子节点', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -224,41 +197,117 @@
                             type: 'success',
                             message: '删除成功!'
                         });
-                        this.submit();
+                        this.loadPerms(parentId);
                     }).catch(error => {
 
                     })
-                }).catch(() => {
 
                 });
 
             },
-            submit(page){
-                page&&(this.searchForm.pager.page=page);
-                this.$refs['searchForm'].validate(valid=>{
-                    if(valid){
-                        axios({
-                            url:`api/dept/findDeptsByCondition`,
-                            method:'POST',
-                            data:this.searchForm
-                        }).then(res=>{
-                            if(res.data.length===0&&this.searchForm.pager.page>1){
-                                this.searchForm.pager.page--;
-                                this.submit();
-                            }else{
-                                this.tableData=res.data;
-                                this.searchForm.pager.totalCount=res.totalCount;
+            operHeader(h, { column, $index }){
+                return h('span',{
+                        'class':{
+                            cell:true
+                        }
+                    },
+                    [
+                        h('span',{domProps:{innerHTML:'操作'}}),
+                        h('i',{
+                            'class':{
+                                iconfont:true,
+                                'icon-add':true
+                            },
+                            style:{
+                                marginLeft:'10px',
+                                fontSize:'20px',
+                                color:config.skin,
+                                verticalAlign:'middle',
+                                cursor:'pointer'
+                            },
+                            on: {
+                                click: this.showAddDialog
                             }
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-                    }
-                })
+                        })
+                    ]
+                );
+            },
+            submit(){
+
             },
             clear(){
-                this.$refs['searchForm'].resetFields();
+
+            },
+            syncUpdate(){
+                this.$confirm('确定同步更新吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios({
+                        url:`${home}/schoolPerm/syncUpdate`,
+                        method:'GET'
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: '同步更新成功!'
+                        });
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             }
+
 
         }
     }
 </script>
+
+<style scoped lang="scss">
+    .box-card {
+        width: 500px;
+    }
+    .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+    }
+    .upsertForm .el-input{
+        width:480px;
+    }
+    .upsertForm {
+        .icon{
+            width:200px;
+            /deep/  .el-input__inner{
+                width:200px;
+                background-color: #f4f4f4;
+            }
+
+        }
+        .iconfont{
+            margin-left: 10px;
+            font-size: 25px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+    }
+    .el-uploader img{
+        width:168px;
+        height: 134px;
+    }
+    .uploadAppIcon /deep/ .el-form-item__content{
+        line-height: normal;
+        i.el-uploader-icon{
+            width:168px;
+            height: 134px;
+            line-height: 134px;
+        }
+    }
+</style>
