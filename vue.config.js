@@ -6,13 +6,10 @@ module.exports = {
             '/api':{
                 target:'http://localhost:9966',
                 changeOrigin:true,
-                pathRewrite:{
+               /* pathRewrite:{
                     '/api':''
-                }
-            },
-            '/ms':{
-                target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
-                changeOrigin: true
+                }*/
+                pathRewrite: {'^/api' : ''}
             }
         }
     }
