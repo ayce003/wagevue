@@ -193,6 +193,11 @@
                         index: 'dashboard',
                         title: '系统首页'
                     },
+                    {
+                        icon: 'el-icon-lx-people',
+                        index: 'myPayslip',
+                        title: '我的工资条'
+                    },
                 ]
             }
         },
@@ -207,8 +212,6 @@
             bus.$on('collapse', msg => {
                 this.collapse = msg;
             })
-            console.log(this.role);
-            console.log(this.token);
         }
     }
 </script>
