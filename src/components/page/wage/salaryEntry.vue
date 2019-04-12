@@ -68,14 +68,31 @@
                             </el-table-column>
                             <el-table-column fixed="right" label="操作" width="235">
                                 <template slot-scope="scope">
-                                    <el-button type="warning" round @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</el-button>
+                                    <el-dropdown>
+                                        <el-button type="primary">
+                                         更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+                                        </el-button>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <span  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">
+                          <el-dropdown-item>查看</el-dropdown-item>
+                                            </span>
+                                            <span   @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>
+                          <el-dropdown-item>编辑</el-dropdown-item>
+                                            </span>
+                                            <span  @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0">
+                          <el-dropdown-item>删除</el-dropdown-item>
+                                            </span>
+                                            <span  @click="sendDate(scope.row.id,salaryTypeId)" >
+                          <el-dropdown-item>发送邮箱</el-dropdown-item>
+                                            </span>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+
+                                    <!--<el-button type="warning" round @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</el-button>
                                     <el-button type="success" round  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</el-button>
                                     <el-button type="info" round @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0"> 删除</el-button>
-                                    <el-button type="danger" round @click="sendDate(scope.row.id,salaryTypeId)" v-if="scope.row.release_state==0"> 发送邮箱</el-button>
+                                    <el-button type="danger" round @click="sendDate(scope.row.id,salaryTypeId)" v-if="scope.row.release_state==0"> 发送邮箱</el-button>-->
 
-                                   <!-- <a class="table-look" @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</a>
-                                    <a class="table-edit"  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</a>
-                                    <a class="table-delete" plain @click="deleteData(scope.row.id)" v-if="scope.row.release_state==0">删除</a>-->
                                 </template>
                             </el-table-column>
                         </el-table>
