@@ -66,7 +66,7 @@
                                     <span v-else>--</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column fixed="right" label="操作" width="250">
+                            <el-table-column fixed="right" label="操作" width="235">
                                 <template slot-scope="scope">
                                     <el-button type="warning" round @click="showAddDialog(scope.row.id, scope.row.release_state)" v-if="scope.row.release_state==1">查看</el-button>
                                     <el-button type="success" round  @click="showAddDialog(scope.row.id, scope.row.release_state)" v-else>编辑</el-button>
