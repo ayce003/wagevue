@@ -50,9 +50,9 @@
                         <el-table style="width:100%" :data="tableData" class="table-ui" :stripe="true" @selection-change="selAllSalaryId">
                             <el-table-column type="selection" width="55" :selectable='isCheckbox' disabled='true'></el-table-column>
                            <!-- <el-table-column prop="row" label="序号" width="80"></el-table-column>-->
-                            <el-table-column prop="work_number" label="工号" width="100px"></el-table-column>
-                            <el-table-column prop="name" label="职工名称"  width="70px"></el-table-column>
-                            <el-table-column prop="salary_time" label="工资月份" width="70px"></el-table-column>
+                            <el-table-column prop="work_number" label="工号"></el-table-column>
+                            <el-table-column prop="name" label="职工名称" ></el-table-column>
+                            <el-table-column prop="salary_time" label="工资月份" ></el-table-column>
                             <el-table-column v-for="item in salaryAttribute" :prop="item.wageAttributeId" :label="item.attributeName" :key="item.wageAttributeId"></el-table-column>
                             <el-table-column label="发放状态">
                                 <template slot-scope="scope">
@@ -60,7 +60,7 @@
                                     <span v-else>已发放</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="release_time" label="发放时间" width="90">
+                            <el-table-column prop="release_time" label="发放时间">
                                 <template slot-scope="scope">
                                     <span v-if="scope.row.release_time">{{scope.row.release_time}}</span>
                                     <span v-else>--</span>
