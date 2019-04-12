@@ -49,10 +49,10 @@
                         <!--表格-->
                         <el-table style="width:100%" :data="tableData" class="table-ui" :stripe="true" @selection-change="selAllSalaryId">
                             <el-table-column type="selection" width="55" :selectable='isCheckbox' disabled='true'></el-table-column>
-                            <el-table-column prop="row" label="序号" width="80"></el-table-column>
-                            <el-table-column prop="work_number" label="工号" width="160px"></el-table-column>
-                            <el-table-column prop="name" label="职工名称" sortable="custom" width="140"></el-table-column>
-                            <el-table-column prop="salary_time" label="工资月份" width="160"></el-table-column>
+                           <!-- <el-table-column prop="row" label="序号" width="80"></el-table-column>-->
+                            <el-table-column prop="work_number" label="工号" width="100px"></el-table-column>
+                            <el-table-column prop="name" label="职工名称"  width="70px"></el-table-column>
+                            <el-table-column prop="salary_time" label="工资月份" width="70px"></el-table-column>
                             <el-table-column v-for="item in salaryAttribute" :prop="item.wageAttributeId" :label="item.attributeName" :key="item.wageAttributeId"></el-table-column>
                             <el-table-column label="发放状态">
                                 <template slot-scope="scope">
@@ -416,16 +416,16 @@
                 }
             },
             sendAllEmail(typeid){
-                if(this.selAllEmail.length>0){
-                    this.$confirm('确定发送工资条给以下职工么?', '温馨提示', {
+               /* if(this.selAllEmail.length>0){*/
+                 /*   this.$confirm('确定发送工资条给以下职工么?', '温馨提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-                    }).then(() => {
+                    }).then(() => {*/
                         axios({
                             url: `/api/wageTypeWorker/sendAllEmailToWorker`,
                             method: 'POST',
-                            data:{wageTypeId:typeid,selAllEmail:this.selAllEmail}
+                            data:{wageTypeId:typeid}
                         }).then(res => {
                                 this.$message({
                                     type: 'success',
@@ -435,30 +435,30 @@
                         }).catch(error => {
                             console.log(error);
                         })
-                    }).catch(() => {
+                   /* }).catch(() => {
                         this.$message({
                             type: 'info',
                             message: '已取消发送'
                         });
-                    });
-                }else{
+                    });*/
+            /*    }else{
                     this.$message({
                         type: 'warning',
                         message: '请选择职工!'
                     });
-                }
+                }*/
             },
             sendAllTel(typeid){
-                if(this.selAllTel.length>0){
+                /*if(this.selAllTel.length>0){
                     this.$confirm('确定发送工资条给以下职工么?', '温馨提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-                    }).then(() => {
+                    }).then(() => {*/
                         axios({
                             url: `/api/wageTypeWorker/sendSalaryToAllTel`,
                             method: 'POST',
-                            data:{wageTypeId:typeid,selAllTel:this.selAllTel}
+                            data:{wageTypeId:typeid}
                         }).then(res => {
                             this.$message({
                                 type: 'success',
@@ -468,7 +468,7 @@
                         }).catch(error => {
                             console.log(error);
                         })
-                    }).catch(() => {
+                   /* }).catch(() => {
                         this.$message({
                             type: 'info',
                             message: '已取消发送'
@@ -479,7 +479,7 @@
                         type: 'warning',
                         message: '请选择职工!'
                     });
-                }
+                }*/
             },
 
             //删除工资条
@@ -524,7 +524,6 @@
 <style lang="scss" scoped>
     .salary-wrap{
         min-height:calc(100% - 60px);
-        padding:30px;
         &.active{
             background: rgb(242, 242, 242);
         }
@@ -532,7 +531,6 @@
             width: 200px;
             float: left;
             background: #fff;
-            padding: 20px;
             .left{
                 .left-type{
                     height: 40px;
@@ -553,7 +551,7 @@
             }
         }
         .salary-right{
-            margin-left: 270px;
+            margin-left: 205px;
             background: #fff;
             padding: 20px;
         }
