@@ -40,9 +40,13 @@
                         <el-input  v-model="upsertForm.tel" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="部门" prop="departmentId" >
-                        <el-select v-model="upsertForm.departmentId" @change="findDeptList" size="mini">
-                            <el-option v-for="item in deptList" :key="item.deptId" :label="item.deptName" :value="item.deptId"></el-option>
-                        </el-select>
+                        <el-cascader
+                                expand-trigger="hover"
+                                :props="defaultProps"
+                                :options="options"
+                                v-model="selectedOptions"
+                                @change="findDeptOptions">
+                        </el-cascader>
                     </el-form-item>
                     <el-form-item label="岗位" prop="postId">
                         <el-select v-model="upsertForm.postId" @change="findPostList" size="mini">
@@ -52,15 +56,6 @@
                     <el-form-item label="工号" prop="workNumber" style="width: 400px">
                         <el-input  v-model="upsertForm.workNumber" auto-complete="off"></el-input>
                     </el-form-item>
-                      <!--<el-form-item label="头像" prop="imgUrl">
-                         <el-input  v-model="upsertForm.imgUrl" auto-complete="off"></el-input>
-                     </el-form-item>-->
-
-                    <!--<el-form-item label="角色" prop="roleType">
-                        <el-select v-model="upsertForm.roleType" @change="findRoleType" size="mini">
-                            <el-option v-for="item in roleTypeList" :key="item.roleType" :label="item.roleName" :value="item.roleType"></el-option>
-                        </el-select>
-                    </el-form-item>-->
                     <el-form-item label="角色" prop="roleType">
                         <el-radio v-for="item in roleTypeList" :key="item.roleType" v-model="upsertForm.roleType" :label="item.roleType">{{item.roleName}}</el-radio>
                     </el-form-item>
@@ -106,10 +101,17 @@
                 deptForm:{
                     id:'',
                     deptName:'',
-                    deptId:'',
                     createTime:'',
                     updateTime:''
                 },
+                options:[],
+                defaultProps: {
+                    value: "id",
+                    label: "deptName",
+                    children: 'children',
+                },
+                selectedOptions: [],
+                deptPath:[],
                 postList:[],
                 postForm:{},
                 roleTypeList:[],
@@ -192,29 +194,18 @@
                   if (this.upsertForm.imgUrl != null) {
                       this.flag = true;
                   }
+
+                  this.selectedOptions = res.data.deptPath;
               }).catch(error=>{
 
               })
           }
-            if (
-                this.deptList.deptName != null
-            ) {
-                this.upsertForm.deptName = this.deptList.deptName;
-            } else {
-                this.findDeptList();
-            }
 
-            if (
-                this.postList.deptName != null
-            ) {
-                this.upsertForm.postName = this.postList.postName;
-            } else {
-                this.findPostList();
-            }
-
+            this.findPostList();
             this.findRoleType();
             this.getSexList();
             this.isSaveOrUpdate();
+            this.findDeptOptions();
         },
         mounted(){
 
@@ -282,20 +273,6 @@
             close(){
                 this.$emit('closeSaveOrUpdate');
             },
-            findDeptList() {
-                this.deptList = [];
-                axios({
-                    url: `api/dept/findDeptListByCondition`, //部门
-                    method: "POST",
-                    data:this.deptForm
-                })
-                    .then(res => {
-                        this.deptList = res.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
             findPostList() {
                 this.postList = [];
                 axios({
@@ -311,6 +288,23 @@
                     });
             },
 
+            findDeptOptions() {
+                this.options = [];
+                axios({
+                    url: `api/dept/findDeptsTreeByCondition`, //岗位
+                    method: "GET",
+                }).then(res => {
+                        this.options = res.data;
+                        //this.upsertForm.departmentId = this.selectedOptions
+                    //console.log(this.selectedOptions.pop())
+                    this.upsertForm.departmentId =this.selectedOptions[this.selectedOptions.length-1]
+
+
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
 
             findRoleType(){
                 this.roleTypeList = [{

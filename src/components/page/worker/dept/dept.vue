@@ -8,7 +8,6 @@
                 <el-button style="float: right; padding: 3px 0" type="text" @click="showAddDialog">添加部门</el-button>
             </div>
             <el-tree
-                    @node-drop="handleDrop"
                     :props="defaultProps"
                     :data="perms"
                     node-key="id"
@@ -95,13 +94,6 @@
             this.loadPerms();
         },
         methods: {
-            handleDrop(draggingNode, dropNode, dropType, ev) {
-                axios({
-                    url:`${home}/schoolPerm/updateSchoolPerm`,
-                    method:'POST',
-                    data:Object.assign(draggingNode.data,{parentId:dropType==='inner'?dropNode.data.id:dropNode.data.parentId})
-                })
-            },
             loadPerms(id){
                 axios({
                     url:`api/dept/findDeptsTreeByCondition`,
@@ -238,29 +230,6 @@
             clear(){
 
             },
-            syncUpdate(){
-                this.$confirm('确定同步更新吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    axios({
-                        url:`${home}/schoolPerm/syncUpdate`,
-                        method:'GET'
-                    }).then(res=>{
-                        this.$message({
-                            type: 'success',
-                            message: '同步更新成功!'
-                        });
-                    })
-
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            }
 
 
         }
