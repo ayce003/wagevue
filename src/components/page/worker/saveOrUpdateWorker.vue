@@ -44,12 +44,11 @@
                                 expand-trigger="hover"
                                 :props="defaultProps"
                                 :options="options"
-                                v-model="selectedOptions"
-                                @change="findDeptOptions">
+                                v-model="selectedOptions">
                         </el-cascader>
                     </el-form-item>
                     <el-form-item label="岗位" prop="postId">
-                        <el-select v-model="upsertForm.postId" @change="findPostList" size="mini">
+                        <el-select v-model="upsertForm.postId" size="mini">
                             <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
                         </el-select>
                     </el-form-item>

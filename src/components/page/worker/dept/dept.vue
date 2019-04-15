@@ -109,7 +109,7 @@
             showAddDialog(e,pId){
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
-                //objUtil.setToDefault(this.upsertForm);
+                this.$refs.upsertForm.resetFields();//清空
                 this.upsertForm.parentId=pId;
             },
             appendChild({id:id}){
