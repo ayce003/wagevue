@@ -188,7 +188,7 @@
         },
         computed: {
             role() {
-                return this.name === 'admin' ? '超级管理员' : '普通用户';
+                return  this.$store.getters.getWorker.roleType === '1' ? '管理员' : '普通员工';
             }
         },
         created(){
