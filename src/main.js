@@ -78,18 +78,8 @@ new Vue({
             if (response.data && response.data.result && response.data.result.code === 909) {
                 me.$router.replace('/login');
 
-            } else if (response.data && response.data.result && response.data.result.code === 904) {
-                me.$message({
-                    showClose: true,
-                    message: response.data.result.msg,
-                    type: 'error'
-                });
-                if (!config.isDev) {
-                    me.$router.replace('/login');
-                }
-
-                throw new Error();
-            } else if (response.data && response.data.result && !response.data.result.success) {
+            }
+            else if (response.data && response.data.result && !response.data.result.success) {
                 if (!resConfig.diy) {
                     me.$message({
                         showClose: true,
