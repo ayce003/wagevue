@@ -47,10 +47,11 @@
                     <el-table-column prop="postName" label="岗位" sortable="custom" ></el-table-column>
                     <el-table-column prop="workNumber" label="工号" sortable="custom" ></el-table-column>
                     <el-table-column prop="roleName" label="角色" sortable="custom" ></el-table-column>
-                    <el-table-column fixed="right" label="操作" width="210"  >
+                    <el-table-column fixed="right" label="操作" width="240"  >
                     <template slot-scope="scope">
                         <el-button  type="success" round  @click="toSaveOrUpdate($event,scope.row.id)">编辑</el-button>
                         <el-button  type="danger" round  @click="deleteData(scope.row.id)">删除</el-button>
+                        <el-button  type="primary" round  @click="resetData(scope.row.id)">重置密码</el-button>
                     </template>
                 </el-table-column>
                 <div slot="empty"><no-data></no-data></div>
@@ -264,6 +265,29 @@
                         this.submit();
                     }).catch(error => {
 
+                    })
+
+                }).catch(() => {
+
+                });
+
+            },
+            resetData(id){
+                this.$confirm('确定重置密码吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'info'
+                }).then(() => {
+                    axios({
+                        url: `api/worker/resetPwd/${id}`,
+                        method: 'GET'
+                    }).then(res => {
+                        this.$message({
+                            type: 'success',
+                            message: '重置成功!'
+                        });
+                        this.submit();
+                    }).catch(error => {
                     })
 
                 }).catch(() => {
