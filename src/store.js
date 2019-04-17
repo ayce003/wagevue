@@ -52,6 +52,9 @@ export default new Vuex.Store({
         },
         setWorker({commit}, worker) {
             commit('setWorker', worker);
+        },
+        clearStore({commit}) {
+            commit('clearStore');
         }
     }
 })
