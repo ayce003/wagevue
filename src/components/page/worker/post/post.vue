@@ -48,7 +48,7 @@
                          </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="large" size="mini" @click="dialog.dialogFormVisible = false">取 消</el-button>
+                <el-button class="large" size="mini" @click="cancel">取 消</el-button>
                 <el-button class="large" size="mini" type="primary" v-if="dialog.title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
                 <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
             </div>
@@ -104,18 +104,7 @@
                                   { required: true, message: '请输入岗位名称', trigger: 'blur',transform:val=>val.trim() },
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
-                          postId: [
-                                  { required: true, message: '请输入岗位id', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          createTime: [
-                                  { required: true, message: '请输入创建时间', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          updateTime: [
-                                  { required: true, message: '请输入更新时间', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
+
                 },
                 dialog:{
                     dialogFormVisible:false,
@@ -151,9 +140,9 @@
             showAddDialog(){
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
-                this.$nextTick(()=>{
+               /*this.$nextTick(()=>{
                     this.$refs.upsertForm.resetFields();
-                });
+                });*/
             },
             showUpdateDialog(id){
                 axios({
@@ -260,6 +249,11 @@
             },
             clear(){
                 this.$refs['searchForm'].resetFields();
+            },
+            cancel(){
+                this.dialog.dialogFormVisible = false;
+                this.upsertForm.postName=null;
+                this.$refs.upsertForm.resetFields();
             }
 
         }

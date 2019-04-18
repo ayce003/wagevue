@@ -37,7 +37,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialog.dialogFormVisible = false">取 消</el-button>
+                <el-button @click="clear">取 消</el-button>
                 <el-button v-if="dialog.title=='增加'" type="primary" @click="saveOrUpdate('upsertForm')">确 定</el-button>
                 <el-button v-else  type="primary" @click="saveOrUpdate('upsertForm')">确 定</el-button>
             </div>
@@ -109,7 +109,6 @@
             showAddDialog(e,pId){
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
-                this.$refs.upsertForm.resetFields();//清空
                 this.upsertForm.parentId=pId;
             },
             appendChild({id:id}){
@@ -228,7 +227,9 @@
 
             },
             clear(){
-
+                this.dialog.dialogFormVisible = false;
+                this.upsertForm.deptName=null;
+                this.$refs.upsertForm.resetFields();//清空
             },
 
 
