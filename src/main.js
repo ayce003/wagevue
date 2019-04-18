@@ -47,37 +47,17 @@ new Vue({
 
         var me = this;
         // 添加请求拦截器
-        let loading, loadingArray = [];
         axios.interceptors.request.use(function (config) {
-            // 在发送请求之前做些什么
             config.headers.token = me.$store.getters.getToken;
-            if (config.loading !== false) {
-                loading = me.$loading({
-                    target: document.getElementById('indexMain'),
-                    fullscreen: false,
-                    background: 'rgba(255,255,255,0.25)'
-                })
-                loadingArray.push(loading)
-            }
             return config;
         }, function (error) {
-            // 对请求错误做些什么
-             loading && loading.close();
-            loadingArray.forEach(item=>item.close())
-            loadingArray = []
             return Promise.reject(error);
         });
         // 添加响应拦截器
         axios.interceptors.response.use(function (response) {
             let resConfig = response.config;
-            // 对响应数据做点什么
-            // loading && loading.close();
-            loadingArray.forEach(item=>item.close())
-            loadingArray = []
-
             if (response.data && response.data.result && response.data.result.code === 909) {
                 me.$router.replace('/login');
-
             }
             else if (response.data && response.data.result && !response.data.result.success) {
                 if (!resConfig.diy) {
@@ -92,10 +72,6 @@ new Vue({
             }
             return response.data;
         }, function (error) {
-            // 对响应错误做点什么
-            // loading && loading.close();
-            loadingArray.forEach(item=>item.close())
-            loadingArray = []
             if (400 == error.response.status) {
                 me.$alert(error.response.data.errors[0].defaultMessage, '错误', {
                     confirmButtonText: '确定'
