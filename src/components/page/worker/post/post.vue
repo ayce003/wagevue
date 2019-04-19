@@ -42,7 +42,6 @@
         <!--添加或者修改表单-->
         <el-dialog  :title="dialog.title"   width="650px" :visible.sync="dialog.dialogFormVisible">
             <el-form class="upsertForm" size="mini" :model="upsertForm" :rules="rules" ref="upsertForm" label-width="80px" >
-                <input type="hidden" :value="upsertForm.id">
                           <el-form-item label="岗位名称" prop="postName">
                              <el-input  v-model="upsertForm.postName" auto-complete="off"></el-input>
                          </el-form-item>
@@ -101,7 +100,7 @@
                 },
                 rules: {
                           postName: [
-                                  { required: true, message: '请输入岗位名称', trigger: 'blur',transform:val=>val.trim() },
+                                  { required: true, message: '请输入岗位名称', trigger: 'blur',transform:val=>val.trim()},
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
 
@@ -140,9 +139,7 @@
             showAddDialog(){
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
-               /*this.$nextTick(()=>{
-                    this.$refs.upsertForm.resetFields();
-                });*/
+                this.upsertForm.postName='';
             },
             showUpdateDialog(id){
                 axios({
@@ -173,7 +170,11 @@
                         }).then(res=>{
                             let num =res.totalCount;
                             if(num>0){
-                                this.$message.error('该岗位已存在');
+                                this.$message({
+                                    type: 'warning',
+                                    message: '该岗位已存在'
+                                });
+                                //this.$refs.upsertForm.resetFields();//清空
                             } else {
                                 axios({
                                     url:`api/post/${this.dialog.title==='增加'?'savePost':'update/updatePost'}`,
@@ -184,7 +185,7 @@
                                         message: this.dialog.title+'成功',
                                         type: 'success'
                                     });
-                                    this.$refs.upsertForm.resetFields();//清空校验
+                                    this.$refs.upsertForm.resetFields();//清空
                                     this.searchForm.pager.page=1;
                                     this.dialog.dialogFormVisible = false;
                                     this.submit();
@@ -252,7 +253,7 @@
             },
             cancel(){
                 this.dialog.dialogFormVisible = false;
-                this.upsertForm.postName=null;
+                this.upsertForm={};
                 this.$refs.upsertForm.resetFields();
             }
 

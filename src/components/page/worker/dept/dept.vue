@@ -109,7 +109,8 @@
             showAddDialog(e,pId){
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
-                this.upsertForm.parentId=pId;
+                this.upsertForm.deptName='';
+                pId===undefined?this.upsertForm.parentId='-1': this.upsertForm.parentId=pId;
             },
             appendChild({id:id}){
                 this.showAddDialog(undefined, id);
@@ -148,8 +149,8 @@
                                 type: 'warning',
                                 message: '该部门名已存在'
                                 });
-                                this.$refs.upsertForm.resetFields();//清空
-                                this.dialog.dialogFormVisible = false;
+                                //this.$refs.upsertForm.resetFields();//清空
+                                //this.dialog.dialogFormVisible = false;
                             }else {
                                 axios({
                                     url:`api/dept/${this.dialog.title==='增加'?'saveDept':'update/updateDept'}`,
