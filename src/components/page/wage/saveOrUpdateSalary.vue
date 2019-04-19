@@ -24,10 +24,10 @@
                     <el-input :placeholder="'请输入'+item.attributeName" v-model="item.value" auto-complete="off" maxlength="6"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;元
                 </template>
             </el-form-item>
-            <el-form-item align="center" class="center-button" v-if="releaseState==1">
+            <el-form-item  class="center-button" v-if="releaseState==1">
                 <el-button class="large" type="common" size="small"  @click="back()">返回</el-button>
             </el-form-item>
-            <el-form-item align="center" class="center-button" v-else>
+            <el-form-item  class="center-button" v-else>
                 <el-button type="cancel" class="large" @click="back" size="small">取消</el-button>
                 <el-button class="large" type="common" size="small"  @click="saveOrUpdate('upsertForm')">确认</el-button>
             </el-form-item>
