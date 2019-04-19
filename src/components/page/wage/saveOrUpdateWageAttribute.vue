@@ -7,10 +7,10 @@
         <el-form :model="upsertForm" size="mini" :rules="rules" ref="upsertForm" label-width="80px" style="margin-top: 20px;" >
             <input type="hidden" :value="upsertForm.id">
                       <el-form-item label="属性名称" prop="attributeName">
-                         <el-input  v-model="upsertForm.attributeName" auto-complete="off"></el-input>
+                         <el-input style="width: 200px"  v-model="upsertForm.attributeName" auto-complete="off"></el-input>
                      </el-form-item>
         </el-form>
-        <div  class="dialog-footer" style="text-align: center;">
+        <div  class="dialog-footer" style="margin-left: 5%">
             <el-button class="large" size="mini" @click="close" type="cancel">取 消</el-button>
             <el-button class="large" size="mini" type="primary" v-if="title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
             <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>

@@ -30,7 +30,7 @@
                 <el-radio v-model="upsertForm.state" label="0">暂不投入使用</el-radio>
             </el-form-item>
     </el-form>
-    <div class="dialog-footer" style="text-align: right;margin-top:60px">
+    <div class="dialog-footer" style="margin-left: 20%;margin-top:10%">
       <el-button class="large" size="mini" @click="close" type="cancel">取 消</el-button>
       <el-button class="large" size="mini" type="primary" v-if="title=='增加'"  @click="saveOrUpdate('upsertForm')">确 定</el-button>
       <el-button class="large" size="mini" type="primary" v-else  @click="saveOrUpdate('upsertForm')">确 定</el-button>
