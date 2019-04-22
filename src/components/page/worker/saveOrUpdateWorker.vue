@@ -44,7 +44,8 @@
                                 expand-trigger="hover"
                                 :props="defaultProps"
                                 :options="options"
-                                v-model="selectedOptions">
+                                v-model="selectedOptions"
+                                @change="findDeptOptions">
                         </el-cascader>
                     </el-form-item>
                     <el-form-item label="岗位" prop="postId">
@@ -122,64 +123,41 @@
 
                 rules: {
                           username: [
-                                  { required: true, message: '请输入用户名', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          password: [
-                                  { required: true, message: '请输入密码', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  { required: true, message: '请输入用户名', trigger: 'blur',transform:val=>val.trim() }
                               ],
                           sex: [
-                                  { required: true, message: '请输入性别', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  { required: true, message: '请输入性别', trigger: 'blur' },
                               ],
                           age: [
-                                  { required: true, message: '请输入年龄', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  { required: true, message: '请输入年龄', trigger: 'blur',transform:val=>val.trim() }
                               ],
 
                             postId: [
-                                  { required: true, message: '请选择岗位', trigger: 'blur',transform:val=>val.trim() },
+                                  { required: true, message: '请选择岗位', trigger: 'blur',transform:val=>val.trim() }
                               ],
                           email: [
                                   { required: true, message: '请输入邮箱', trigger: 'blur',transform:val=>val.trim() },
                                   {pattern: "^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$", message: "邮箱格式不正确", trigger: "blur"},
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
                           tel: [
                                   { required: true, message: '请输入手机', trigger: 'blur',transform:val=>val.trim() },
-                                  {pattern: "^1\\d{10}$", message: "请输入11位手机号", trigger: "blur"},
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  {pattern: "^1\\d{10}$", message: "请输入11位手机号", trigger: "blur"}
                               ],
                           roleType: [
-                                  { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() }
                               ],
                             roleName: [
-                                { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() },
-                                {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() }
                             ],
                           name: [
-                                  { required: true, message: '请输入真实姓名', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  { required: true, message: '请输入真实姓名', trigger: 'blur',transform:val=>val.trim() }
                               ],
-                           departmentId: [
-                                  { required: true, message: '请选择部门', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                            selectedOptions: [
+                                  { required: true, message: '请选择部门', trigger: 'blur'},
                               ],
                           workNumber: [
-                                  { required: true, message: '请输入员工工号', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '必须为数字', trigger: 'blur' }
+                                  { required: true, message: '请输入员工工号', trigger: 'blur',transform:val=>val.trim() }
                               ],
-                          updateTime: [
-                                  { required: true, message: '请输入更新时间', trigger: 'blur',transform:val=>val.trim() },
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                            imgUrl: [
-                                { required: true, message: '请输入头像', trigger: 'blur',transform:val=>val.trim() },
-                                {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                            ],
-
                 }
             }
         },
@@ -297,6 +275,7 @@
                         //this.upsertForm.departmentId = this.selectedOptions
                     //console.log(this.selectedOptions.pop())
                     this.upsertForm.departmentId =this.selectedOptions[this.selectedOptions.length-1]
+                    console.log(this.upsertForm.departmentId)
 
 
                     })
