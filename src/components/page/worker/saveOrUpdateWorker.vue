@@ -49,7 +49,7 @@
                         </el-cascader>
                     </el-form-item>
                     <el-form-item label="岗位" prop="postId">
-                        <el-select v-model="upsertForm.postId" size="mini">
+                        <el-select v-model="upsertForm.postId" size="mini" @change="findPostList">
                             <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
                         </el-select>
                     </el-form-item>
@@ -152,7 +152,7 @@
                           name: [
                                   { required: true, message: '请输入真实姓名', trigger: 'blur',transform:val=>val.trim() }
                               ],
-                            selectedOptions: [
+                          departmentId: [
                                   { required: true, message: '请选择部门', trigger: 'blur'},
                               ],
                           workNumber: [

@@ -8,7 +8,7 @@
                             <el-input v-model="searchForm.name" placeholder="请输入真实姓名"></el-input>
                         </el-form-item>
                         <el-form-item label="岗位" prop="postId">
-                            <el-select v-model="searchForm.postId" placeholder="请选择岗位" size="mini">
+                            <el-select v-model="searchForm.postId" placeholder="请选择岗位" @change="findPostList"  size="mini">
                                 <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
                             </el-select>
                         </el-form-item>
