@@ -9,7 +9,7 @@
                         </el-form-item>
                         <el-form-item label="岗位" prop="postId">
                             <el-select v-model="searchForm.postId" placeholder="请选择岗位" @change="findPostList"  size="mini">
-                                <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
+                                <el-option v-for="item in postList" :key="item.id" :label="item.postName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
 
@@ -112,23 +112,8 @@
         data() {
             return {
                 searchForm:{
-                      username: '',
-                      password: '',
-                      sex: '',
-                      age: '',
-                      imgUrl: '',
-                      postId: '',
-                      email: '',
-                      tel: '',
-                      roleType: '',
-                      roleName: '',
                       name: '',
-                      departmentId: '',
-                      createTime: '',
-                      updateTime: '',
-                      deptName:'',
-                      postName:'',
-                      workNumber:'',
+                      postId: '',
                     pager:{
                         sortField:'',
                         sortOrder:'',

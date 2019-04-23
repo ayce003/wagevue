@@ -50,7 +50,7 @@
                     </el-form-item>
                     <el-form-item label="岗位" prop="postId">
                         <el-select v-model="upsertForm.postId" size="mini" @change="findPostList">
-                            <el-option v-for="item in postList" :key="item.postId" :label="item.postName" :value="item.postId"></el-option>
+                            <el-option v-for="item in postList" :key="item.id" :label="item.postName" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="工号" prop="workNumber" style="width: 400px">

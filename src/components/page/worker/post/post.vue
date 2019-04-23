@@ -65,7 +65,7 @@
             return {
                 searchForm:{
                       postName: '',
-                      postId: '',
+                      id: '',
                       createTime: '',
                       updateTime: '',
                     pager:{
@@ -80,23 +80,13 @@
                 upsertForm:{
                         id:'',
                         postName:'',
-                        postId:'',
                         createTime:'',
                         updateTime:''
                 },
                 searchRules: {
                           postName: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          postId: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          createTime: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          updateTime: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
+                              ]
                 },
                 rules: {
                           postName: [
