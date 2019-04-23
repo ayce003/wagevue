@@ -10,8 +10,7 @@
                             <el-button  type="primary" id="findBtn"  @click="submit(1)">查询</el-button>
                             <el-button  type="warning" plain @click="clear">清空</el-button>
                         </el-form-item>
-                        <el-button type="primary" size="mini"  style="float:right;" @click="showAddDialog">新增岗位</el-button>
-
+                    <el-button type="primary" size="mini"  style="float:right;" @click="showAddDialog">新增岗位</el-button>
                 </el-form>
          </div>
         <!--表格-->
@@ -90,8 +89,7 @@
                 },
                 rules: {
                           postName: [
-                                  { required: true, message: '请输入岗位名称', trigger: 'blur',transform:val=>val.trim()},
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
+                                  { required: true, message: '请输入岗位名称', trigger: 'blur',transform:val=>val.trim()}
                               ],
 
                 },
@@ -130,6 +128,9 @@
                 this.dialog.dialogFormVisible=true;
                 this.dialog.title='增加';
                 this.upsertForm.postName='';
+                this.$nextTick(()=>{
+                    this.$refs.upsertForm.clearValidate();
+                });
             },
             showUpdateDialog(id){
                 axios({
@@ -175,9 +176,8 @@
                                         message: this.dialog.title+'成功',
                                         type: 'success'
                                     });
-                                    this.$refs.upsertForm.resetFields();//清空
-                                    this.searchForm.pager.page=1;
                                     this.dialog.dialogFormVisible = false;
+                                    this.$refs.upsertForm.resetFields();//清空
                                     this.submit();
                                 })
                             }
@@ -243,7 +243,7 @@
             },
             cancel(){
                 this.dialog.dialogFormVisible = false;
-                this.upsertForm={};
+                this.upsertForm.postName='';
                 this.$refs.upsertForm.resetFields();
             }
 

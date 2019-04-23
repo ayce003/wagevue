@@ -111,6 +111,9 @@
                 this.dialog.title='增加';
                 this.upsertForm.deptName='';
                 pId===undefined?this.upsertForm.parentId='-1': this.upsertForm.parentId=pId;
+                this.$nextTick(()=>{
+                    this.$refs.upsertForm.clearValidate();
+                });
             },
             appendChild({id:id}){
                 this.showAddDialog(undefined, id);
@@ -126,6 +129,9 @@
                     Object.assign(this.upsertForm, res.data);
                     this.dialog.dialogFormVisible=true;
                     this.dialog.title = '修改';
+                    this.$nextTick(()=>{
+                        this.$refs.upsertForm.clearValidate();
+                    });
                 }).catch(error=>{
 
                 })
