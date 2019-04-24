@@ -37,15 +37,14 @@
                             <img v-else src="../../../assets/img/avatar.png" width="60" height="60" class="avatar">
                         </template>
                     </el-table-column>
+                    <el-table-column prop="workNumber" label="工号" sortable="custom" ></el-table-column>
                     <el-table-column prop="name" label="真实姓名" sortable="custom" ></el-table-column>
-                    <el-table-column prop="username" label="用户名" sortable="custom" ></el-table-column>
                     <el-table-column prop="sex" label="性别" sortable="custom" ></el-table-column>
                     <el-table-column prop="age" label="年龄" sortable="custom" ></el-table-column>
                     <el-table-column prop="email" label="邮箱" sortable="custom" ></el-table-column>
                     <el-table-column prop="tel" label="手机" sortable="custom" ></el-table-column>
                     <el-table-column prop="deptName" label="部门" sortable="custom" ></el-table-column>
                     <el-table-column prop="postName" label="岗位" sortable="custom" ></el-table-column>
-                    <el-table-column prop="workNumber" label="工号" sortable="custom" ></el-table-column>
                     <el-table-column prop="roleName" label="角色" sortable="custom" ></el-table-column>
                     <el-table-column fixed="right" label="操作" width="240"  >
                     <template slot-scope="scope">
@@ -142,9 +141,6 @@
                 dialogUploadErrorVisible: false, //导入信息时用到
                 uploadErrors: [], //导入异常
                 rules: {
-                          username: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
                           password: [
                                   {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
                               ],
@@ -358,7 +354,7 @@
                 console.log(res)
                 if (res.data.code == 200) {
                     this.$message({
-                        message: "员工信息导入成功"+res.data.others,
+                        message: "员工信息导入成功",
                         type: "success",
                     });
                     this.submit();

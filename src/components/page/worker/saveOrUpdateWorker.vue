@@ -18,15 +18,12 @@
                     </el-row>
                 </el-tooltip>
             </div>
+                    <el-form-item label="工号" prop="workNumber" style="width: 400px">
+                        <el-input  v-model="upsertForm.workNumber" auto-complete="off" :disabled="saveOrUpdateVisible"></el-input>
+                    </el-form-item>
                     <el-form-item label="员工姓名" prop="name" style="width: 400px">
-                        <el-input  v-model="upsertForm.name" auto-complete="off" v-on:input="transPinyin" :disabled="saveOrUpdateVisible"></el-input>
+                        <el-input  v-model="upsertForm.name" auto-complete="off"  ></el-input>
                     </el-form-item>
-                    <el-form-item label="用户名" prop="username" style="width: 400px">
-                        <el-input  v-model="upsertForm.username" auto-complete="off" :disabled="saveOrUpdateVisible"></el-input>
-                    </el-form-item>
-                     <!-- <el-form-item label="性别" prop="sex">
-                         <el-input  v-model="upsertForm.sex" auto-complete="off"></el-input>
-                     </el-form-item>-->
                     <el-form-item label="性别" prop="sex" >
                         <el-radio v-for="item in sexList" :key="item.sex" v-model="upsertForm.sex" :label="item.sex">{{item.sex}}</el-radio>
                     </el-form-item>
@@ -53,9 +50,6 @@
                             <el-option v-for="item in postList" :key="item.id" :label="item.postName" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="工号" prop="workNumber" style="width: 400px">
-                        <el-input  v-model="upsertForm.workNumber" auto-complete="off"></el-input>
-                    </el-form-item>
                     <el-form-item label="角色" prop="roleType">
                         <el-radio v-for="item in roleTypeList" :key="item.roleType" v-model="upsertForm.roleType" :label="item.roleType">{{item.roleName}}</el-radio>
                     </el-form-item>
@@ -79,7 +73,6 @@
             return {
                 upsertForm:{
                         id:'',
-                        username:'',
                         password:'',
                         sex:'',
                         age:'',
@@ -122,9 +115,6 @@
 
 
                 rules: {
-                          username: [
-                                  { required: true, message: '请输入用户名', trigger: 'blur',transform:val=>val.trim() }
-                              ],
                           sex: [
                                   { required: true, message: '请输入性别', trigger: 'blur' },
                               ],
@@ -205,12 +195,12 @@
                             url:`api/worker/findWorkerListByCondition`,
                             method:'POST',
                             data:{
-                                username:this.upsertForm.username
+                                workNumber:this.upsertForm.workNumber
                             }
                         }).then(res=>{
                             let num =res.data.length;
                             if(num>0){
-                                this.$message.error('该用户名已存在');
+                                this.$message.error('该工号已存在');
                             } else {
                                 axios({
                                     url:`api/worker/${this.title==='增加'?'saveWorker':'update/updateWorker'}`,
