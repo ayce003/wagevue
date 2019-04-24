@@ -3,8 +3,8 @@
         <div class="ms-login">
             <div class="ms-title">后台管理系统</div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="请输入账号">
+                <el-form-item prop="workNumber">
+                    <el-input v-model="ruleForm.workNumber" placeholder="请输入工号">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
@@ -29,12 +29,12 @@
         data: function(){
             return {
                 ruleForm: {
-                    username: '',
+                    workNumber: '',
                     password: ''
                 },
                 rules: {
-                    username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                    workNumber: [
+                        { required: true, message: '请输入工号', trigger: 'blur' }
                     ],
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
@@ -45,7 +45,7 @@
         methods: {
             login(ruleForm) {
                 this.$refs[ruleForm].validate((valid) => {
-                    localStorage.setItem('ms_username',this.ruleForm.username);
+                   /* localStorage.setItem('ms_username',this.ruleForm.username);*/
                     if (!valid) {
                         this.$alert('请填写符合规范的用户名和密码', '错误', {
                             confirmButtonText: '确定',
@@ -58,14 +58,15 @@
                         method: 'POST',
                         diy: true,
                         data: {
-                            username: this.ruleForm.username,
+                            workNumber: this.ruleForm.workNumber,
                             password: md5(this.ruleForm.password)
                             /*   token: obj.getToken()*/
                         }
                     }).then(res => {
+                        localStorage.setItem('ms_username',res.data2.name);
                         if (!res.result.success) {
                             /*   obj.reset();*/
-                            this.ruleForm.username = '';
+                            this.ruleForm.workNumber = '';
                             this.ruleForm.password = '';
                             this.$alert(res.result.msg, '错误', {
                                 confirmButtonText: '确定',
