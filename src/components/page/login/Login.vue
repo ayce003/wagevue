@@ -63,7 +63,6 @@
                             /*   token: obj.getToken()*/
                         }
                     }).then(res => {
-                        localStorage.setItem('ms_username',res.data2.name);
                         if (!res.result.success) {
                             /*   obj.reset();*/
                             this.ruleForm.workNumber = '';
@@ -76,6 +75,7 @@
                             });
                             return;
                         }
+                        localStorage.setItem('ms_username',res.data2.name);
                         this.$store.commit('setToken', res.data);
                         this.$store.commit('setWorker', res.data2);
                         this.$router.push('/');
