@@ -10,8 +10,9 @@
             <el-input style="width: 200px" placeholder="请重复输入新密码" type="password" v-model="pwdForm.newPassword2" auto-complete="off"></el-input>
         </el-form-item>
     </el-form>
-    <div style="padding-left: 130px">
+    <div style="padding-left: 70px">
         <el-button style="width: 100px" type="primary" round  @click="updatePassword()">确 定</el-button>
+        <el-button style="width: 100px" type="success" round  @click="backtomain()">取消</el-button>
     </div>
         </div>
     </div>
@@ -79,6 +80,9 @@
                     }
                 })
 
+            },
+            backtomain(){
+                this.$router.replace('/');
             }
         }
     }
