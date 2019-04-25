@@ -19,6 +19,19 @@
                 <el-table-column v-for="item in salaryAttribute" :prop="item.wageAttributeId" :label="item.attributeName" :key="item.wageAttributeId"></el-table-column>
                 <el-table-column prop="salary_time" label="工资月份" width="160"></el-table-column>
             </el-table>
+            <el-pagination
+                    style="margin-top: 10px;padding-bottom: 20px;"
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="searchForm.pager.totalCount"
+                    :page-size="searchForm.pager.pageSize"
+                    :current-page.sync="searchForm.pager.page"
+                    :page-sizes="[10, 20, 30, 40, 50, 100]"
+                    @size-change="sizeChange"
+                    @current-change="currentChange"
+                    @prev-click="currentChange"
+                    @next-click="currentChange"
+            ></el-pagination>
         </div>
     </div>
 </template>
@@ -32,6 +45,13 @@
             return {
                 searchForm:{
                     salaryTime: '',
+                    pager:{
+                        sortField:'salaryTime',
+                        sortOrder:'desc',
+                        page:1,
+                        pageSize:10,
+                        totalCount:0
+                    }
                 },
                 tableData: [],
                 salaryAttribute:[], //表头属性
@@ -43,9 +63,16 @@
         mounted(){
         },
         methods: {
+            sizeChange(pageSize){
+                this.searchForm.pager.pageSize=pageSize;
+                this.getTableData();
+            },
+            currentChange(page){
+                this.searchForm.pager.page=page;
+                this.getTableData();
+            },
             // 获取表格数据
             submit() {
-                // console.log(this.salaryTypeId);
                 axios({
                     url:`/api/wageTypeWorker/findWageAttributeNameByWorkerId`,
                     method:'POST',
@@ -54,7 +81,6 @@
                     if(res.result.success){
                         this.salaryAttribute=res.data; //表头数据
                     }
-                    console.log(res);
                 }).then(res=>{
                     this.getTableData();
                 }).catch(function (error) {
@@ -66,12 +92,31 @@
                 axios({
                     url:`/api/wageTypeWorker/FindMyPayslipByWorkerId`,
                     method:'POST',
-                    data: {salaryTime:this.searchForm.salaryTime}
+                    data:this.searchForm
                 }).then(res=>{
                     if(res.result.success){
-                        this.tableData=res.data;
+                        if(res.data.length===0&&this.searchForm.pager.page>1){
+                            this.searchForm.pager.page--;
+                            this.getTableData();
+                        }else{
+                            this.tableData=res.data;
+                            for (var i = 0; i < this.tableData.length; i++) {
+                                this.tableData[i] = Object.assign(
+                                    {},
+                                    this.tableData[i],
+                                    {
+                                        row:
+                                            (this.searchForm.pager.page - 1 == 0
+                                                ? ""
+                                                : this.searchForm.pager.page - 1) *
+                                            this.searchForm.pager.pageSize +
+                                            (i + 1)
+                                    }
+                                );
+                            }
+                            this.searchForm.pager.totalCount=res.totalCount;
+                        }
                     }
-                    console.log(res);
                 }).catch(function (error) {
                     console.log(error);
                 });
