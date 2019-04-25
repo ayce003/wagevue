@@ -53,6 +53,15 @@
                     <el-form-item label="角色" prop="roleType">
                         <el-radio v-for="item in roleTypeList" :key="item.roleType" v-model="upsertForm.roleType" :label="item.roleType">{{item.roleName}}</el-radio>
                     </el-form-item>
+                    <el-form-item label="状态" prop="statusType">
+                            <el-switch
+                                    v-model="upsertForm.statusType"
+                                    active-color="#13ce66"
+                                    inactive-color="#AAAAAA"
+                                    @change="changeStatus"
+                            >
+                            </el-switch>
+                    </el-form-item>
 
         </el-form>
         <div  class="dialog-footer" style="text-align: center;">
@@ -88,7 +97,9 @@
                         updateTime:'',
                         deptName: '',
                         postName: '',
-                        workNumber:''
+                        workNumber:'',
+                        status:0,
+                        statusType: false,
                 },
                 deptList:[],
                 deptForm:{
@@ -135,10 +146,10 @@
                                   {pattern: "^1\\d{10}$", message: "请输入11位手机号", trigger: "blur"}
                               ],
                           roleType: [
-                                  { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() }
+                                  { required: true, message: '请选择角色', trigger: 'blur',transform:val=>val.trim() }
                               ],
                             roleName: [
-                                { required: true, message: '请输入角色', trigger: 'blur',transform:val=>val.trim() }
+                                { required: true, message: '请选择角色', trigger: 'blur',transform:val=>val.trim() }
                             ],
                           name: [
                                   { required: true, message: '请输入真实姓名', trigger: 'blur',transform:val=>val.trim() }
@@ -150,6 +161,9 @@
                                   { required: true, message: '请输入员工工号', trigger: 'blur',transform:val=>val.trim() },
                                   {pattern: "^[1-9]\\d*|0$", message: "请输入数字", trigger: "blur"},
                               ],
+                            statusType: [
+                                { required: true, message: '请选择状态', trigger: 'blur'}
+                            ],
                 }
             }
         },
@@ -180,6 +194,8 @@
 
         },
         methods:{
+            changeStatus(){
+            },
 
             isSaveOrUpdate(){
                 if(this.title==='增加'){

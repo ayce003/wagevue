@@ -46,6 +46,17 @@
                     <el-table-column prop="deptName" label="部门" sortable="custom" width="180" ></el-table-column>
                     <el-table-column prop="postName" label="岗位" sortable="custom" ></el-table-column>
                     <el-table-column prop="roleName" label="角色" sortable="custom" ></el-table-column>
+                    <el-table-column prop="statusType" label="状态" >
+                        <template slot-scope="scope">
+                            <el-switch
+                                    v-model="scope.row.statusType"
+                                    @change="changeStatus(scope.row.statusType,scope.row.id)"
+                                    active-color="#13ce66"
+                                    inactive-color="#AAAAAA"
+                                    >
+                            </el-switch>
+                        </template>
+                    </el-table-column>
                     <el-table-column fixed="right" label="操作" width="240"  >
                     <template slot-scope="scope">
                         <el-button  type="success" round  @click="toSaveOrUpdate($event,scope.row.id)">编辑</el-button>
@@ -120,6 +131,11 @@
                         pageSize:10,
                         totalCount:0
                     }
+                },
+                upsertForm:{
+                    id:'',
+                    status:'',
+                    statusType:''
                 },
                 tableData: [],
                 postList:[],
@@ -210,7 +226,6 @@
                 this.submit();
             },
             toSaveOrUpdate($event,id){
-                console.log(id);
                 if(id){
                     this.saveOrUpdate.title='修改';
                     this.saveOrUpdate.id=id;
@@ -316,6 +331,25 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
+            changeStatus(statusType,id){
+
+
+               axios({
+                    url:`api/worker/update/updateWorker`,
+                    method:'POST',
+                    data:{
+                        id:id,
+                        status:statusType===true?1:0,
+                    }
+                }).then(res=>{
+                   this.$message({
+                       type: 'success',
+                       message: '修改状态成功!'
+                   });
+                }).catch(function (error) {
+                    console.log(error);
+                });
             },
 
             /*-------------------------------------批量导入相关方法------------------------------------------------------------*/
