@@ -1,5 +1,6 @@
 <template>
     <div class="foeget-wrap">
+        <span style="color: red;padding-left: 43%;">{{$route.query.msg}}</span>
         <div class="ms-forget">
     <el-form  :model="pwdForm" :rules="pwdFormRules" ref="pwdForm" label-width="100px">
         <el-form-item label="新密码" prop="newPassword">

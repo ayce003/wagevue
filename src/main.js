@@ -9,7 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import "babel-polyfill";
-
+import md5 from 'md5'
+import sha1 from 'sha1'
 Vue.config.productionTip = false
 Vue.use(ElementUI, {
     size: 'small'
@@ -21,9 +22,8 @@ router.beforeEach((to, from, next) => {
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
         next('/login');
-    }
-    else {
-            next();
+    } else {
+        next();
     }
 })
 

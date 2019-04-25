@@ -24,6 +24,7 @@
 <script>
     import axios from "axios";
     import md5 from 'md5';
+    import sha1 from 'sha1';
     let obj;
     export default {
         data: function(){
@@ -75,10 +76,19 @@
                             });
                             return;
                         }
+                        var morpas=res.data2.password;
+                        var oldpas=sha1(md5("66666666"));
                         localStorage.setItem('ms_username',res.data2.name);
+                        localStorage.setItem('morpas',morpas);
                         this.$store.commit('setToken', res.data);
                         this.$store.commit('setWorker', res.data2);
-                        this.$router.push('/');
+
+                        if(morpas==oldpas){
+                            this.$router.push({path:'/forget',query: {msg:'您账号的密码不安全，请重新设置密码'}});
+                        }else {
+                            this.$router.push('/');
+                        }
+
                     })
                 });
             }

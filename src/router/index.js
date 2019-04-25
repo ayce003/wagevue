@@ -125,16 +125,17 @@ export default new Router({
                     component: resolve => require(['../components/page/worker/post/post.vue'], resolve),
                     meta: { title: '岗位管理' }
                 },
-                {
-                    path: '/forget',
-                    component: resolve => require(['../components/page/forget/forgetPassword.vue'], resolve),
-                    meta: { title: '修改密码' }
-                },
+
             ]
         },
         {
             path: '/login',
             component: resolve => require(['../components/page/login/Login.vue'], resolve)
+        },
+        {
+            path: '/forget',
+            component: resolve => require(['../components/page/forget/forgetPassword.vue'], resolve),
+            meta: { title: '修改密码' }
         },
 
         {
