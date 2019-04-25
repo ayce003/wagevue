@@ -340,7 +340,7 @@
                     method:'POST',
                     data:{
                         id:id,
-                        status:statusType===true?1:0,
+                        statusType:statusType,
                     }
                 }).then(res=>{
                    this.$message({
