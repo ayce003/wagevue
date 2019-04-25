@@ -119,7 +119,8 @@
                                   { required: true, message: '请输入性别', trigger: 'blur' },
                               ],
                           age: [
-                                  { required: true, message: '请输入年龄', trigger: 'blur',transform:val=>val.trim() }
+                                  { required: true, message: '请输入年龄', trigger: 'blur',transform:val=>val.trim() },
+                                  {pattern: "^[1-9]\\d*|0$", message: "请输入数字", trigger: "blur"},
                               ],
 
                             postId: [
@@ -146,7 +147,8 @@
                                   { required: true, message: '请选择部门', trigger: 'blur'},
                               ],
                           workNumber: [
-                                  { required: true, message: '请输入员工工号', trigger: 'blur',transform:val=>val.trim() }
+                                  { required: true, message: '请输入员工工号', trigger: 'blur',transform:val=>val.trim() },
+                                  {pattern: "^[1-9]\\d*|0$", message: "请输入数字", trigger: "blur"},
                               ],
                 }
             }
