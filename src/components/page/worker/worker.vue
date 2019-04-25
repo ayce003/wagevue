@@ -156,48 +156,6 @@
                 dialogUploadVisible: false, //导入信息时用到
                 dialogUploadErrorVisible: false, //导入信息时用到
                 uploadErrors: [], //导入异常
-                rules: {
-                          password: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          sex: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          age: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          imgUrl: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          postId: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          email: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          tel: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          roleType: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                        roleName: [
-                            {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                        ],
-                          name: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          departmentId: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          createTime: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                          updateTime: [
-                                  {  max: 32, message: '长度必须少于32个字符', trigger: 'blur' }
-                              ],
-                }
-
             }
         },
         created(){
