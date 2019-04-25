@@ -43,7 +43,7 @@
                     <el-table-column prop="age" label="年龄" sortable="custom" ></el-table-column>
                     <el-table-column prop="email" label="邮箱" sortable="custom" ></el-table-column>
                     <el-table-column prop="tel" label="手机" sortable="custom" ></el-table-column>
-                    <el-table-column prop="deptName" label="部门" sortable="custom" ></el-table-column>
+                    <el-table-column prop="deptName" label="部门" sortable="custom" width="180" ></el-table-column>
                     <el-table-column prop="postName" label="岗位" sortable="custom" ></el-table-column>
                     <el-table-column prop="roleName" label="角色" sortable="custom" ></el-table-column>
                     <el-table-column fixed="right" label="操作" width="240"  >
