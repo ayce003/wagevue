@@ -58,6 +58,8 @@
                                     v-model="upsertForm.statusType"
                                     active-color="#13ce66"
                                     inactive-color="#AAAAAA"
+                                    active-text="启用"
+                                    inactive-text="禁用"
                                     @change="changeStatus"
                             >
                             </el-switch>
