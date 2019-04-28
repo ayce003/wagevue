@@ -179,6 +179,9 @@
                   if (this.upsertForm.imgUrl != null) {
                       this.flag = true;
                   }
+                  if(this.upsertForm.imgUrl===''){
+                      this.flag=false;
+                  }
 
                   this.selectedOptions = res.data.deptPath;
               }).catch(error=>{
